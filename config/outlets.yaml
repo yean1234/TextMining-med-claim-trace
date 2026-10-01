@@ -1,0 +1,72 @@
+# 매체 → 매체 유형 매핑 (수동 분류 — 팀 합의로 고칠 것)
+# type 키는 그래프 라벨로 쓰이므로 영문이다.
+outlet_types:
+  wire: 통신사
+  national_daily: 종합일간지
+  economic_daily: 경제지
+  broadcast: 방송
+  medical_trade: 의약전문지(B2B)
+  health_consumer: 건강·생활 전문매체
+  online: 인터넷·기타
+  unknown: 미분류
+
+# naver_oid 는 네이버 뉴스 URL(n.news.naver.com/mnews/article/{oid}/{aid})의 언론사 코드.
+# 확실한 것만 적었다. 스크래핑하면 페이지에서 언론사명을 직접 읽으므로 없어도 된다.
+outlets:
+  - {name: 연합뉴스, type: wire, domains: [yna.co.kr], naver_oid: "001"}
+  - {name: 뉴시스, type: wire, domains: [newsis.com], naver_oid: "003"}
+  - {name: 뉴스1, type: wire, domains: [news1.kr], naver_oid: "421"}
+  - {name: 조선일보, type: national_daily, domains: [chosun.com], naver_oid: "023"}
+  - {name: 중앙일보, type: national_daily, domains: [joongang.co.kr], naver_oid: "025"}
+  - {name: 동아일보, type: national_daily, domains: [donga.com], naver_oid: "020"}
+  - {name: 한겨레, type: national_daily, domains: [hani.co.kr], naver_oid: "028"}
+  - {name: 경향신문, type: national_daily, domains: [khan.co.kr], naver_oid: "032"}
+  - {name: 한국일보, type: national_daily, domains: [hankookilbo.com], naver_oid: "469"}
+  - {name: 서울신문, type: national_daily, domains: [seoul.co.kr], naver_oid: "081"}
+  - {name: 문화일보, type: national_daily, domains: [munhwa.com], naver_oid: "021"}
+  - {name: 국민일보, type: national_daily, domains: [kmib.co.kr], naver_oid: "005"}
+  - {name: 세계일보, type: national_daily, domains: [segye.com], naver_oid: "022"}
+  - {name: 이데일리, type: economic_daily, domains: [edaily.co.kr], naver_oid: "018"}
+  - {name: 매일경제, type: economic_daily, domains: [mk.co.kr], naver_oid: "009"}
+  - {name: 한국경제, type: economic_daily, domains: [hankyung.com], naver_oid: "015"}
+  - {name: 서울경제, type: economic_daily, domains: [sedaily.com], naver_oid: "011"}
+  - {name: 머니투데이, type: economic_daily, domains: [mt.co.kr], naver_oid: "008"}
+  - {name: 파이낸셜뉴스, type: economic_daily, domains: [fnnews.com], naver_oid: "014"}
+  - {name: 헤럴드경제, type: economic_daily, domains: [heraldcorp.com], naver_oid: "016"}
+  - {name: 아시아경제, type: economic_daily, domains: [asiae.co.kr], naver_oid: "277"}
+  - {name: 뉴스핌, type: economic_daily, domains: [newspim.com]}
+  - {name: KBS, type: broadcast, domains: [kbs.co.kr], naver_oid: "056"}
+  - {name: MBC, type: broadcast, domains: [imbc.com], naver_oid: "214"}
+  - {name: SBS, type: broadcast, domains: [sbs.co.kr], naver_oid: "055"}
+  - {name: YTN, type: broadcast, domains: [ytn.co.kr], naver_oid: "052"}
+  - {name: JTBC, type: broadcast, domains: [jtbc.co.kr], naver_oid: "437"}
+  - {name: MBN, type: broadcast, domains: [mbn.co.kr], naver_oid: "057"}
+  - {name: 채널A, type: broadcast, domains: [ichannela.com], naver_oid: "449"}
+  - {name: TV조선, type: broadcast, domains: [tvchosun.com], naver_oid: "448"}
+  - {name: 메디칼타임즈, type: medical_trade, domains: [medicaltimes.com]}
+  - {name: 약사공론, type: medical_trade, domains: [kpanews.co.kr]}
+  - {name: 데일리메디, type: medical_trade, domains: [dailymedi.com]}
+  - {name: 데일리팜, type: medical_trade, domains: [dailypharm.com]}
+  - {name: 메디칼업저버, type: medical_trade, domains: [monews.co.kr]}
+  - {name: 의협신문, type: medical_trade, domains: [doctorsnews.co.kr]}
+  - {name: 청년의사, type: medical_trade, domains: [docdocdoc.co.kr]}
+  - {name: 메디컬투데이, type: medical_trade, domains: [mdtoday.co.kr]}
+  - {name: 의학신문, type: medical_trade, domains: [bosa.co.kr]}
+  - {name: 메디파나뉴스, type: medical_trade, domains: [medipana.com]}
+  - {name: 히트뉴스, type: medical_trade, domains: [hitnews.co.kr]}
+  - {name: 더바이오, type: medical_trade, domains: [thebionews.net]}
+  - {name: 헬스코리아뉴스, type: medical_trade, domains: [hkn24.com]}
+  - {name: 약업신문, type: medical_trade, domains: [yakup.com]}
+  - {name: 메디게이트뉴스, type: medical_trade, domains: [medigatenews.com]}
+  - {name: 하이닥, type: health_consumer, domains: [hidoc.co.kr]}
+  - {name: 코메디닷컴, type: health_consumer, domains: [kormedi.com], naver_oid: "296"}
+  - {name: 헬스조선, type: health_consumer, domains: [health.chosun.com], naver_oid: "346"}
+  - {name: 헬스경향, type: health_consumer, domains: [k-health.com]}
+  - {name: 인사이트, type: online, domains: [insight.co.kr]}
+  - {name: 위키트리, type: online, domains: [wikitree.co.kr]}
+  - {name: 펜앤드마이크, type: online, domains: [pennmike.com]}
+  - {name: 뉴데일리, type: online, domains: [newdaily.co.kr]}
+  - {name: 노컷뉴스, type: online, domains: [nocutnews.co.kr], naver_oid: "079"}
+  - {name: 오마이뉴스, type: online, domains: [ohmynews.com], naver_oid: "047"}
+  - {name: 프레시안, type: online, domains: [pressian.com], naver_oid: "002"}
+  - {name: 데일리안, type: online, domains: [dailian.co.kr], naver_oid: "119"}

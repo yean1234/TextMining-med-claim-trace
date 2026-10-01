@@ -1,0 +1,209 @@
+# =====================================================================
+# 묶음(bundle) 정의 파일
+#   묶음 1개 = 논문 1편 + 그 논문을 보도한 한국어 기사 3~5건
+#   목표     = 묶음 20~25개 (기사 약 60~125건)
+#   수집 방향 = 논문을 먼저 정하고 → 그 논문을 보도한 기사를 찾아 내려간다
+#
+# 아래 6개 묶음은 노션 '팀플 주제 구체화' + 사례 정리(사례 1~5)를 옮긴 것이다.
+#  - 사례 2(타이레놀)는 논문이 2편이라 '묶음당 논문 1편' 원칙에 따라 B02/B03으로 나눴다.
+#  - known_articles 는 스크린샷에 있던 기사 '제목 힌트'다. 제목이 잘린(…) 경우가 많고
+#    URL이 비어 있다. 수집 후 article_candidates.csv 에서 실제 기사와 연결해야 한다.
+#  - DOI 는 2026-10-01에 웹 검색으로 확인했다. B03(Wan 2026)은 DOI를 확인하지 못해
+#    fetch-papers 단계에서 Crossref 제목 검색으로 찾는다(결과는 사람이 확인).
+#
+# 새 묶음 추가 방법: 맨 아래 TEMPLATE 블록을 복사해서 채운다.
+#   `medclaim discover` 결과(annotation/bundle_candidates.csv)를 보고 고르면
+#   '기사가 3건 이상 붙는 논문'을 찾기 쉽다.
+# =====================================================================
+
+bundles:
+
+  - bundle_id: B01_PPI_dementia
+    label: "PPI(위산분비억제제) ↔ 치매"
+    drug_terms: [PPI, PPI제제, 양성자펌프억제제, 프로톤펌프억제제, 위산분비억제제, 위산억제제,
+                 오메프라졸, 에스오메프라졸, 에소메프라졸, 란소프라졸, 판토프라졸, 라베프라졸, 넥시움]
+    outcome_terms: [치매, 인지장애, 인지기능, 알츠하이머]
+    paper:
+      doi: "10.1212/WNL.0000000000207747"
+      title: "Cumulative Use of Proton Pump Inhibitors and Risk of Dementia: The Atherosclerosis Risk in Communities Study"
+      journal: Neurology
+      first_author: Northuis
+      published: "2023-08-09"
+    search:
+      queries: ["PPI 치매", "위산분비억제제 치매", "양성자펌프억제제 치매", "PPI 장기 복용 치매 위험", "역류성식도염 약 치매"]
+      date_from: "2023-08-09"
+      date_to: "2023-10-31"
+    known_articles:
+      - outlet: 메디칼타임즈
+        title_hint: "PPI제제 장기 복용시 치매 위험…1.3배 발병률 상승"
+        date: "2023-08-10"
+        url: ""
+    notes: >
+      논문: 현재 복용자 전체는 치매 위험 유의하지 않음(HR 1.1, 95% CI 0.9-1.3),
+      누적 4.4년 초과 복용군에서만 상승(약 1.33배). 메디칼타임즈 기사는 제목에 수치를 단정적으로,
+      본문에 '인과관계는 추가 연구 필요'·'PPI를 끊어야 한다는 의미는 아니다'를 실음 → 제목-본문 불일치,
+      '4.4년 초과' 조건이 제목에서 '장기 복용'으로 뭉뚱그려짐 → 조건 누락 코딩 대상.
+
+  - bundle_id: B02_APAP_autism_Ahlqvist2024
+    label: "임신 중 아세트아미노펜 ↔ 자폐·ADHD (스웨덴 형제 비교, JAMA 2024)"
+    drug_terms: [아세트아미노펜, 타이레놀, 파라세타몰, 해열진통제, 진통제]
+    outcome_terms: [자폐, 자폐증, 자폐스펙트럼, ADHD, 주의력결핍, 지적장애]
+    paper:
+      doi: "10.1001/jama.2024.3172"
+      title: "Acetaminophen Use During Pregnancy and Children's Risk of Autism, ADHD, and Intellectual Disability"
+      journal: JAMA
+      first_author: Ahlqvist
+      published: "2024-04-09"
+    search:
+      queries: ["임신 타이레놀 자폐", "아세트아미노펜 임신 자폐 스웨덴", "타이레놀 자폐 형제", "임신 중 진통제 ADHD 자폐"]
+      date_from: "2024-04-09"
+      date_to: "2025-12-31"
+    known_articles: []
+    notes: >
+      스웨덴 아동 2,480,797명. 형제자매 대조 시 연관성 소멸(ASD HR 0.98).
+      2025-09 트럼프 발언 이후 기사들은 이 논문을 '배경'으로만 인용하는 경우가 많다
+      → article_candidates.csv 의 link_type 을 main / background 로 꼭 구분할 것.
+
+  - bundle_id: B03_APAP_autism_Wan2026
+    label: "임신 중 아세트아미노펜 ↔ 자폐·ADHD (홍콩 형제 매칭, JAMA Intern Med 2026)"
+    drug_terms: [아세트아미노펜, 타이레놀, 파라세타몰, 해열진통제, 진통제]
+    outcome_terms: [자폐, 자폐증, 자폐스펙트럼, ADHD, 주의력결핍]
+    paper:
+      doi: ""   # 미확인 → fetch-papers 가 제목으로 Crossref 검색
+      title: "Prenatal Acetaminophen (Paracetamol) Use and the Risk of Autism and/or Attention-Deficit/Hyperactivity Disorder Among Sibling-Matched Cohorts"
+      journal: JAMA Internal Medicine
+      first_author: Wan
+      published: "2026-06-29"
+    search:
+      queries: ["임신 중 타이레놀 자폐 연관성 없어", "홍콩대 타이레놀 자폐", "타이레놀 자폐 ADHD 형제", "타이레놀 괴담"]
+      date_from: "2026-06-29"
+      date_to: "2026-09-30"
+    known_articles:
+      - outlet: 한국일보
+        title_hint: "트럼프가 틀렸다… \"임신 중 타이레놀 복용, 아이 자폐와 연관성 없어\""
+        url: ""
+      - outlet: 이데일리
+        title_hint: ""
+        url: ""
+      - outlet: 문화일보
+        title_hint: "타이레놀 괴담?…"
+        url: ""
+      - outlet: 메디칼타임즈
+        title_hint: "연관성 있어도 원인 아냐"
+        url: ""
+    notes: >
+      ASD 124,333명 / ADHD 97,285명 형제 비교. 스크린샷 사례2 기사 4건은 B02/B03 중 어느 논문을
+      보도했는지 아직 확인되지 않았다(paper_link 미검증). 한국일보 기사는 본문에 표본 수·연구설계·
+      복용 시기 분석은 있지만 방법론적 한계 서술이 없었다. 제목 프레임이 정치(트럼프)/선정(괴담?)/
+      인과 구분 유지(원인 아냐)로 갈림 → 인과 표현 강도 7범주 코딩에 변량이 충분함.
+
+  - bundle_id: B04_semaglutide_NAION
+    label: "세마글루타이드(위고비·오젬픽) ↔ 실명 유발 안질환(NAION)"
+    drug_terms: [세마글루타이드, 위고비, 오젬픽, 리벨서스, GLP-1, GLP-1 계열, 비만치료제, 비만약, 당뇨약]
+    outcome_terms: [NAION, 비동맥전방허혈시신경병증, 허혈성 시신경병증, 시신경, 실명, 시력 손실, 시력 상실, 안질환]
+    paper:
+      doi: "10.1001/jamaophthalmol.2024.2296"
+      title: "Risk of Nonarteritic Anterior Ischemic Optic Neuropathy in Patients Prescribed Semaglutide"
+      journal: JAMA Ophthalmology
+      first_author: Hathaway
+      published: ""   # fetch-papers 가 채움
+    search:
+      queries: ["위고비 실명", "세마글루타이드 시신경", "오젬픽 NAION", "비만치료제 실명 위험", "위고비 시력 손실"]
+      date_from: "2024-07-01"
+      date_to: "2024-12-31"
+    known_articles:
+      - outlet: 약사공론
+        title_hint: "'시력 손실' 부작용…안전성 검토 필요"
+        url: ""
+      - outlet: 더바이오
+        title_hint: "시신경 이상?…일부 환자서 'NAION' 발생"
+        url: ""
+      - outlet: 메디컬투데이
+        title_hint: "실명 유발 안질환 위험 높여"
+        url: ""
+      - outlet: 펜앤드마이크
+        title_hint: "자칫하단 '실명위험'"
+        url: ""
+    notes: >
+      단일기관(Mass Eye and Ear) 매칭 코호트, 당뇨군 HR 약 4배 / 과체중·비만군 약 7배.
+      같은 호에 편집자 논평 동시 게재. 제목이 '검토 필요'→'발생'→'위험 높여'→'실명위험'으로 강해짐.
+      '단일기관 의뢰 환자 대상'이라는 조건이 어느 기사부터 사라지는지 추적.
+      주의: 일부 기사는 2025년 EMA/식약처 검토 보도일 수 있음 → link_type 확인.
+
+  - bundle_id: B05_semaglutide_suicidality
+    label: "세마글루타이드 ↔ 자살충동 (위험 '축소' 방향 결과)"
+    drug_terms: [세마글루타이드, 위고비, 오젬픽, GLP-1, 비만치료제, 비만약, 당뇨약]
+    outcome_terms: [자살, 자살충동, 자살 생각, 자살사고, 자해, 극단적 선택]
+    paper:
+      doi: "10.1038/s41591-023-02672-2"
+      title: "Association of semaglutide with risk of suicidal ideation in a real-world cohort"
+      journal: Nature Medicine
+      first_author: Wang
+      published: "2024-01-05"
+    search:
+      queries: ["위고비 자살충동", "세마글루타이드 자살", "오젬픽 자살 생각", "비만치료제 자살충동 연구"]
+      date_from: "2024-01-05"
+      date_to: "2024-04-30"
+    known_articles: []
+    notes: >
+      24만 명 + 158만 명, 자살생각 위험 49~73% 낮음(연관). 후속 근거: EMA 2024.4 검토 '인과적 연관 뒷받침 안 됨'.
+      아이슬란드 규제기관 3건 사례 보고에서 시작된 논란 → 대규모 연구로 반박된 구조.
+      '3건 보고' 기사(위험 과장)와 '반박 연구' 기사(위험 축소)의 보도량 비대칭은 묶음 밖 맥락 자료로 따로 센다.
+
+  - bundle_id: B06_finasteride_depression
+    label: "피나스테리드(탈모약) ↔ 우울·자살충동"
+    drug_terms: [피나스테리드, 프로페시아, 탈모약, 탈모 치료제, 탈모치료제]
+    outcome_terms: [우울, 우울증, 자살, 자살충동, 정신 질환, 정신질환, 불안]
+    paper:
+      doi: "10.4088/JCP.25nr15862"
+      title: "Failing Public Health Again? Analytical Review of Depression and Suicidality From Finasteride"
+      journal: Journal of Clinical Psychiatry
+      first_author: Brezis
+      published: ""   # 2025년 9월 온라인 — fetch-papers 가 채움
+    search:
+      queries: ["피나스테리드 우울증", "탈모약 자살충동", "탈모약 우울증 연구", "프로페시아 우울"]
+      date_from: "2025-09-01"
+      date_to: "2025-12-31"
+    known_articles:
+      - outlet: 하이닥
+        title_hint: "\"심각한 정신 질환 유발?\""
+        url: ""
+      - outlet: 데일리메디
+        title_hint: "우울증 논란 탈모약…'인과관계 회의적'"
+        url: ""
+      - outlet: 데일리팜
+        title_hint: ""
+        url: ""
+      - outlet: 인사이트
+        title_hint: "\"머리 심으려다 성기능 상실\" 26세 청년의 눈물"
+        url: ""
+    notes: >
+      같은 저널에 반박 코멘터리 2편('균형 있는 해석을 위한 재고' 등). 같은 사안에 '유발?'과
+      '인과관계 회의적'이 정반대로 붙은 사례. 데일리메디 기사는 반박 코멘터리를 보도한 것일 수 있음
+      → 이 묶음에 넣을지(link_type) 판단 필요. 하이닥 기사는 저널명을 'Psychiatrist.com'으로 표기
+      (실제: The Journal of Clinical Psychiatry) → source_error(출처 표기 부정확) 코딩 예시.
+      인사이트 기사는 개인 사연 기사일 수 있음 → 논문 보도인지 확인.
+
+# ---------------------------------------------------------------------
+# TEMPLATE (복사해서 위 bundles: 목록에 붙여 넣기)
+#
+#  - bundle_id: B07_약물_결과        # 영문/숫자/_ 권장 (그래프 라벨로 쓰임)
+#    label: "약물 ↔ 부작용"
+#    drug_terms: [성분명, 제품명, 계열명]
+#    outcome_terms: [부작용명, 동의어]
+#    paper:
+#      doi: ""
+#      title: ""
+#      journal: ""
+#      first_author: ""
+#      published: ""
+#    search:
+#      queries: ["약물 부작용", "제품명 부작용 연구"]
+#      date_from: "YYYY-MM-DD"       # 논문 온라인 공개일
+#      date_to: "YYYY-MM-DD"         # 보통 공개일 + 2~3개월
+#    known_articles: []
+#    notes: ""
+#
+# 예: 노션 메모의 '묶음 1 → 논문 A (Nature, 생쥐 수명)'은 아직 논문이 특정되지 않아 넣지 않았다.
+#     동물 연구는 animal_generalization(동물→인간 일반화) 코딩까지 할 수 있어 하나쯤 넣으면 좋다.
+# ---------------------------------------------------------------------

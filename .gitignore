@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# 비밀키
+.env
+
+# 수집 원문(기사 HTML·본문·댓글)은 저작권/개인정보 문제로 레포에 올리지 않는다.
+data/raw/
+data/interim/
+data/processed/
+
+# 데모·실험 실행 결과
+runs/
+outputs/*
+!outputs/README.md
+
+# 사람이 붙여넣은 기사 원문
+annotation/manual_texts/*
+!annotation/manual_texts/README.md
+
+.DS_Store

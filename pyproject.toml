@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "medclaim"
+version = "0.1.0"
+description = "약물 부작용 연구의 논문 → 한국어 기사(제목·본문) → 댓글 전달 과정 추적 파이프라인 (텍스트마이닝 팀 프로젝트)"
+requires-python = ">=3.10"
+dependencies = [
+  "requests>=2.31",
+  "beautifulsoup4>=4.12",
+  "lxml>=4.9",
+  "pandas>=2.0",
+  "PyYAML>=6.0",
+  "openpyxl>=3.1",
+  "kiwipiepy>=0.17",
+  "scikit-learn>=1.3",
+  "statsmodels>=0.14",
+  "matplotlib>=3.7",
+  "scipy>=1.10",
+]
+
+[project.scripts]
+medclaim = "medclaim.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

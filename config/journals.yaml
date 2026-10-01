@@ -1,0 +1,19 @@
+# 저널 별칭 — 기사 본문에서 저널명 언급을 찾고(출처 표기), 논문-기사 연결 점수에 쓴다.
+# 키 = bundles.yaml 의 paper.journal 값과 같게. 한국어 표기는 기사마다 달라서 계속 추가해야 한다.
+journals:
+  Neurology: [Neurology, 뉴롤로지, 미국신경학회지, 미국신경학회 학술지, 신경학회지]
+  JAMA: [JAMA, 자마, 미국의사협회지, 미국의학협회지, 미국의사협회 학술지, 미국의학협회 저널]
+  JAMA Internal Medicine: [JAMA Internal Medicine, 자마 내과학, JAMA 내과학, 미국의사협회지 내과학]
+  JAMA Ophthalmology: [JAMA Ophthalmology, 자마 안과학, JAMA 안과학, 미국의사협회 안과학]
+  Nature Medicine: [Nature Medicine, 네이처 메디슨, 네이처메디슨, 네이처 메디신]
+  Nature: [Nature, 네이처]
+  Journal of Clinical Psychiatry: [Journal of Clinical Psychiatry, J Clin Psychiatry, 임상정신의학저널, 임상정신의학 저널, 저널 오브 클리니컬 사이키아트리]
+  The Lancet: [Lancet, 랜싯, 란셋]
+  NEJM: [NEJM, New England Journal of Medicine, 뉴잉글랜드저널오브메디슨, 뉴잉글랜드 저널 오브 메디슨, 뉴잉글랜드의학저널]
+  BMJ: [BMJ, British Medical Journal, 영국의학저널, 영국의학협회지]
+  Science: [Science, 사이언스]
+  PLOS ONE: [PLOS ONE, PLoS One, 플로스원]
+  Diabetes Care: [Diabetes Care, 다이아비티스 케어]
+  Gut: [Gut, 거트]
+  # 출처 표기 오류 탐지용: 저널이 아닌데 저널처럼 인용되는 이름
+  _not_journal: [Psychiatrist.com, 메디컬익스프레스, Medical Xpress, 사이언스데일리, ScienceDaily, 유레칼러트, EurekAlert, 헬스데이, HealthDay]

@@ -1,0 +1,62 @@
+# 영어 논문 초록(결론부) 사전 코딩용 사전 — Sumner et al. (2014) 범주
+# 영어는 조동사·부정어가 동사 '앞'에 오므라 앞쪽 창(window_before)을 본다.
+claim_strength:
+  causal:
+    - 're:\bcaus(e|es|ed|ing)\b'
+    - 're:\bincreas(e|es|ed)\s+(the\s+)?risks?\b'
+    - 're:\bleads?\s+to\b'
+    - 're:\bresult(s|ed)?\s+in\b'
+    - 're:\binduc(e|es|ed)\b'
+    - 're:\breduc(e|es|ed)\s+(the\s+)?risks?\b'
+    - 're:\bprotect(s|ed)?\s+against\b'
+    - 're:\bprevent(s|ed)?\b'
+    - 're:\bcausal(ly)?\b'
+    - 're:\battributable\s+to\b'
+  ambiguous:
+    - 're:\blinked\s+(to|with)\b'
+    - 're:\brelated\s+to\b'
+    - 're:\bconnected\s+(to|with)\b'
+    - 're:\bpredict(s|ed|or|ive)?\b'
+  correlational:
+    - 're:\bassociat(ed|ion|ions)\b'
+    - 're:\bcorrelat(ed|ion|ions)\b'
+    - 're:\b(higher|lower|increased|elevated|reduced|decreased)\s+(hazard|risk|odds|incidence)\b'
+  no_relationship:
+    - 're:\bnot\s+(significantly\s+|statistically\s+significantly\s+)?(associated|linked|related|correlated)\b'
+    - 're:\bno\s+(significant\s+|statistically\s+significant\s+|clear\s+)?(association|increased\s+risk|difference|evidence|link)\b'
+    - 're:\bdo(es)?\s+not\s+support\b'
+    - 're:\bdid\s+not\s+(increase|cause|find|show)\b'
+    - 're:\bnull\s+association\b'
+
+window_before: 30
+negation_before: '\b(not|no|nor|neither|without|cannot)\b[^.;:]*$'
+modal_before:
+  may: '\b(may|might|could|possibly|potentially|plausibly)\b[^.;:]*$'
+  can: '\bcan\b[^.;:]*$'
+
+direction:
+  increase: ['re:\b(higher|increase[sd]?|elevated|greater|excess)\b', 're:\bcaus']
+  decrease: ['re:\b(lower|reduc(e|ed|es|tion)|decrease[sd]?|protect\w*|prevent\w*)\b']
+
+# 연구 설계 추정 (우선순위 순서대로 검사)
+design:
+  meta: ['re:\bmeta-?analys', 're:\bsystematic\s+review']
+  rct: ['re:\brandomi[sz]ed\b', 're:\bplacebo-controlled\b']
+  animal: ['re:\b(mice|mouse|murine|rats?|rodents?|zebrafish|drosophila|primates?|in\s+vivo)\b']
+  in_vitro: ['re:\bin\s+vitro\b', 're:\bcell\s+lines?\b', 're:\bcultured\s+cells\b']
+  case_report: ['re:\bcase\s+(report|series)\b']
+  pharmacovigilance: ['re:\b(adverse\s+event\s+reporting|FAERS|VigiBase|EudraVigilance|disproportionality|pharmacovigilance)\b']
+  review: ['re:\breview\b', 're:\bcommentary\b']
+  observational: ['re:\bcohort\b', 're:\bretrospective\b', 're:\bprospective\b', 're:\bregistry\b', 're:\bcase-control\b',
+                  're:\bcross-sectional\b', 're:\bpopulation-based\b', 're:\bsibling\b', 're:\belectronic\s+health\s+records?\b',
+                  're:\btarget\s+trial\s+emulation\b', 're:\bmatched\b', 're:\bobservational\b']
+
+conditions:
+  population: ['re:\baged?\s+\d', 're:\b(adults?|children|adolescents?|pregnan\w*|women|men|patients|participants|older)\b']
+  animal: ['re:\b(mice|mouse|murine|rats?|animals?)\b']
+  sample_size: ['re:\b\d[\d,]*\s+(participants|patients|individuals|children|adults|women|men|persons|pairs)\b']
+  dose: ['re:\b\d+(\.\d+)?\s*(mg|µg|mcg|IU)\b', 're:\bdos(e|es|age|ing)\b']
+  duration: ['re:\b\d+(\.\d+)?\s*(years?|months?|weeks?)\b', 're:\bcumulative\b', 're:\blong-term\b', 're:\bfollow-up\b']
+  design: ['re:\b(cohort|randomi[sz]ed|trial|meta-analysis|case-control|sibling|single-center|single-centre|matched)\b']
+  effect_size: ['re:\b(HR|OR|RR|hazard ratio|odds ratio|relative risk|95%\s*CI)\b']
+  limitation: ['re:\b(limitation|confound\w*|further (research|studies)|caution|cannot (establish|infer|determine))\b']
