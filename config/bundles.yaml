@@ -33,11 +33,19 @@ bundles:
       queries: ["PPI 치매", "위산분비억제제 치매", "양성자펌프억제제 치매", "PPI 장기 복용 치매 위험", "역류성식도염 약 치매"]
       date_from: "2023-08-09"
       date_to: "2023-10-31"
-    known_articles:
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
       - outlet: 메디칼타임즈
-        title_hint: "PPI제제 장기 복용시 치매 위험…1.3배 발병률 상승"
-        date: "2023-08-10"
-        url: ""
+        title_hint: PPI제제 장기 복용시 치매 위험…1.3배 발병률 상승
+        url: "https://m.medicaltimes.com/News/NewsView.html?ID=1154917"
+      - outlet: 메디코파마
+        title_hint: PPI 장기사용, 치매 위험↑…국산 P-CAB 제제, 대체 가능할까?
+        url: "https://www.medicopharma.co.kr/news/articleView.html?idxno=61123"
+      - outlet: 더사이언스플러스
+        title_hint: 위산분비억제제(PPI) 장기 복용하면 치매 위험 높아
+        url: "https://thescienceplus.com/news/newsview.php?ncode=1065595137213180&dt=m"
+      - outlet: US메트로뉴스
+        title_hint: 위산 역류 치료제 장기 복용하면 치매 위험 커져
+        url: "https://usmetronews.com/us/9048"
     notes: >
       논문: 현재 복용자 전체는 치매 위험 유의하지 않음(HR 1.1, 95% CI 0.9-1.3),
       누적 4.4년 초과 복용군에서만 상승(약 1.33배). 메디칼타임즈 기사는 제목에 수치를 단정적으로,
@@ -58,7 +66,31 @@ bundles:
       queries: ["임신 타이레놀 자폐", "아세트아미노펜 임신 자폐 스웨덴", "타이레놀 자폐 형제", "임신 중 진통제 ADHD 자폐"]
       date_from: "2024-04-09"
       date_to: "2025-12-31"
-    known_articles: []
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
+      - outlet: 경향신문
+        title_hint: 트럼프 “임신 중 타이레놀, 자녀 자폐 유발”…학계 ‘반론’
+        url: "https://www.khan.co.kr/article/202509232023015/"
+      - outlet: 경향신문
+        title_hint: “타이레놀이 자폐 유발” 트럼프 주장에··· 전문가들 “비과학적이고 무책임한 주장”
+        url: "https://www.khan.co.kr/article/202509231651001"
+      - outlet: 메디칼타임즈
+        title_hint: 연관성 있어도 원인 아냐…타이레놀 자폐 논쟁 결론은?
+        url: "https://www.medicaltimes.com/Mobile/News/NewsView.html?ID=1165509"
+      - outlet: 메디칼타임즈
+        title_hint: 트럼프, 타이레놀 자폐증 경고…전문가들 인과관계 불분명
+        url: "https://www.medicaltimes.com/Mobile/News/NewsView.html?ID=1165365"
+      - outlet: 문화일보
+        title_hint: 타이레놀 괴담?… ‘임신 중 복용’ 증가 시기에 자폐증은 되레 줄어
+        url: "https://www.munhwa.com/article/11545592"
+      - outlet: 하이닥
+        title_hint: 임신 중 타이레놀 복용, 자폐증 발병과 무관...아동 150만 명 분석 결과
+        url: "https://news.hidoc.co.kr/news/articleView.html?idxno=61146"
+      - outlet: 네이트(출처 확인)
+        title_hint: '"임신 중 타이레놀이 자폐 유발?" 대규모 데이터 결과 나왔다'
+        url: "https://m.news.nate.com/view/20260217n08402"
+      - outlet: 네이트(출처 확인)
+        title_hint: '"임신 중 타이레놀, 자폐 유발?"…248만명 추적 결과 나왔다는데'
+        url: "https://m.news.nate.com/view/20260217n06864"
     notes: >
       스웨덴 아동 2,480,797명. 형제자매 대조 시 연관성 소멸(ASD HR 0.98).
       2025-09 트럼프 발언 이후 기사들은 이 논문을 '배경'으로만 인용하는 경우가 많다
@@ -69,7 +101,7 @@ bundles:
     drug_terms: [아세트아미노펜, 타이레놀, 파라세타몰, 해열진통제, 진통제]
     outcome_terms: [자폐, 자폐증, 자폐스펙트럼, ADHD, 주의력결핍]
     paper:
-      doi: ""   # 미확인 → fetch-papers 가 제목으로 Crossref 검색
+      doi: "10.1001/jamainternmed.2026.2215"   # 2026-10-02 Crossref 제목 검색으로 확인
       title: "Prenatal Acetaminophen (Paracetamol) Use and the Risk of Autism and/or Attention-Deficit/Hyperactivity Disorder Among Sibling-Matched Cohorts"
       journal: JAMA Internal Medicine
       first_author: Wan
@@ -78,19 +110,25 @@ bundles:
       queries: ["임신 중 타이레놀 자폐 연관성 없어", "홍콩대 타이레놀 자폐", "타이레놀 자폐 ADHD 형제", "타이레놀 괴담"]
       date_from: "2026-06-29"
       date_to: "2026-09-30"
-    known_articles:
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
       - outlet: 한국일보
-        title_hint: "트럼프가 틀렸다… \"임신 중 타이레놀 복용, 아이 자폐와 연관성 없어\""
-        url: ""
-      - outlet: 이데일리
-        title_hint: ""
-        url: ""
-      - outlet: 문화일보
-        title_hint: "타이레놀 괴담?…"
-        url: ""
-      - outlet: 메디칼타임즈
-        title_hint: "연관성 있어도 원인 아냐"
-        url: ""
+        title_hint: 트럼프가 틀렸다… "임신 중 타이레놀 복용, 아이 자폐와 연관성 없어"
+        url: "https://www.hankookilbo.com/news/article/A2026063012590004876"
+      - outlet: 한국경제
+        title_hint: 임신 중 타이레놀 복용 논란 종결?…자폐·ADHD 위험 높이지 않는다
+        url: "https://www.hankyung.com/article/2026063076277"
+      - outlet: 다음(출처 확인)
+        title_hint: '[건강포커스] "임신 중 타이레놀 복용, 자폐·ADHD 위험 높이지 않는다"'
+        url: "https://v.daum.net/v/20260630050217495"
+      - outlet: 아시아경제
+        title_hint: '"타이레놀-자폐 연관성 근거 없다"…70만쌍 분석의 결론'
+        url: "https://view.asiae.co.kr/article/2026063008493765772"
+      - outlet: 의약일보
+        title_hint: 임신 타이레놀-자폐·ADHD, '안전' 최종 판명
+        url: "https://www.medicaldaily.co.kr/post/20636"
+      - outlet: 라디오코리아
+        title_hint: “임신 중 타이레놀 자폐와 무관" 최신 연구 발표
+        url: "https://m.radiokorea.com/news/article.php?uid=488973"
     notes: >
       ASD 124,333명 / ADHD 97,285명 형제 비교. 스크린샷 사례2 기사 4건은 B02/B03 중 어느 논문을
       보도했는지 아직 확인되지 않았다(paper_link 미검증). 한국일보 기사는 본문에 표본 수·연구설계·
@@ -111,19 +149,28 @@ bundles:
       queries: ["위고비 실명", "세마글루타이드 시신경", "오젬픽 NAION", "비만치료제 실명 위험", "위고비 시력 손실"]
       date_from: "2024-07-01"
       date_to: "2024-12-31"
-    known_articles:
-      - outlet: 약사공론
-        title_hint: "'시력 손실' 부작용…안전성 검토 필요"
-        url: ""
-      - outlet: 더바이오
-        title_hint: "시신경 이상?…일부 환자서 'NAION' 발생"
-        url: ""
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
+      - outlet: 뉴시스
+        title_hint: 살 빼는 주사 맞고 실명?…하버드 의대 연구 결과에 제약사들 '깜짝'
+        url: "https://www.newsis.com/view/NISX20240706_0002801018"
+      - outlet: 디지털투데이
+        title_hint: 인기 비만 치료제 위고비·오젬픽이 실명 위험 높인다?…연구
+        url: "https://www.digitaltoday.co.kr/news/articleView.html?idxno=523987"
       - outlet: 메디컬투데이
-        title_hint: "실명 유발 안질환 위험 높여"
-        url: ""
-      - outlet: 펜앤드마이크
-        title_hint: "자칫하단 '실명위험'"
-        url: ""
+        title_hint: 위고비, ′눈 중풍′ 위험 높여
+        url: "https://www.mdtoday.co.kr/news/view/1065585526345786"
+      - outlet: 메디칼업저버
+        title_hint: 당뇨·비만약 세마글루타이드, 실명 위험과 연관됐을 수도?
+        url: "https://www.monews.co.kr/news/articleView.html?idxno=333177"
+      - outlet: 메디칼타임즈
+        title_hint: 비만약 세마글루타이드 치명적 부작용 확인…시신경증 위험 ↑
+        url: "https://www.medicaltimes.com/Users/News/NewsView.html?ID=1159570"
+      - outlet: 약사공론
+        title_hint: 위고비·삭센다 치료 중 '시력 손실' 부작용…안전성 검토 필요
+        url: "https://www.kpanews.co.kr/article/show.asp?idx=257198&category=D"
+      - outlet: 더메디컬
+        title_hint: 오젬픽·위고비, 실명 위험 낮추지만 시신경 손상 우려도
+        url: "https://www.themedical.kr/news/articleView.html?idxno=2584"
     notes: >
       단일기관(Mass Eye and Ear) 매칭 코호트, 당뇨군 HR 약 4배 / 과체중·비만군 약 7배.
       같은 호에 편집자 논평 동시 게재. 제목이 '검토 필요'→'발생'→'위험 높여'→'실명위험'으로 강해짐.
@@ -144,7 +191,22 @@ bundles:
       queries: ["위고비 자살충동", "세마글루타이드 자살", "오젬픽 자살 생각", "비만치료제 자살충동 연구"]
       date_from: "2024-01-05"
       date_to: "2024-04-30"
-    known_articles: []
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
+      - outlet: 다음(출처 확인)
+        title_hint: “당뇨병약 오젬픽·비만약 위고비, 자살 충동 위험 없다”
+        url: "https://v.daum.net/v/20240107101538968"
+      - outlet: 코메디닷컴
+        title_hint: “오젬픽과 위고비, 자살 충동 위험과 무관”
+        url: "https://kormedi.com/1652112/"
+      - outlet: 팜뉴스
+        title_hint: 노보노디스크 오젬픽·위고비 자살충동 위험 누명 벗을까
+        url: "https://www.pharmnews.com/news/articleView.html?idxno=237787"
+      - outlet: 메디파나뉴스
+        title_hint: 우울증·자살 부작용 제기된 'GLP-1'…반박 연구 등장 주목
+        url: "https://www.medipana.com/news/articleView.html?idxno=330989"
+      - outlet: 약사공론
+        title_hint: '''위고비'' 자살 충동 부작용…''삭센다''는 괜찮을까?'
+        url: "https://www.kpanews.co.kr/news/articleView.html?idxno=252775"
     notes: >
       24만 명 + 158만 명, 자살생각 위험 49~73% 낮음(연관). 후속 근거: EMA 2024.4 검토 '인과적 연관 뒷받침 안 됨'.
       아이슬란드 규제기관 3건 사례 보고에서 시작된 논란 → 대규모 연구로 반박된 구조.
@@ -164,19 +226,25 @@ bundles:
       queries: ["피나스테리드 우울증", "탈모약 자살충동", "탈모약 우울증 연구", "프로페시아 우울"]
       date_from: "2025-09-01"
       date_to: "2025-12-31"
-    known_articles:
+    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
       - outlet: 하이닥
-        title_hint: "\"심각한 정신 질환 유발?\""
-        url: ""
-      - outlet: 데일리메디
-        title_hint: "우울증 논란 탈모약…'인과관계 회의적'"
-        url: ""
+        title_hint: 믿었던 탈모 치료제 '피나스테리드', "심각한 정신 질환 유발?"
+        url: "https://news.hidoc.co.kr/news/articleView.html?idxno=53902"
+      - outlet: 뉴데일리
+        title_hint: '"男 탈모치료제 ''피나스테리드'', 자살 충동 등 심각한 정신건강 문제 유발"'
+        url: "https://www.newdaily.co.kr/site/data/html/2025/09/30/2025093000360.html"
+      - outlet: 다음(출처 확인)
+        title_hint: 머리카락 지키려다 우울증 걸릴라…탈모약 위험성 밝혀져
+        url: "https://v.daum.net/v/20251012060219048"
       - outlet: 데일리팜
-        title_hint: ""
-        url: ""
-      - outlet: 인사이트
-        title_hint: "\"머리 심으려다 성기능 상실\" 26세 청년의 눈물"
-        url: ""
+        title_hint: 탈모약 피나스테리드, 성기능 장애 따른 자살 충동 경고
+        url: "https://www.dailypharm.com/user/news/337060"
+      - outlet: 약사공론
+        title_hint: 피나스테리드, 자살·우울증 위험 증가 '우려'
+        url: "https://www.kpanews.co.kr/article/show.asp?idx=217668&category=D"
+      - outlet: 데일리메디
+        title_hint: 우울증 논란 탈모약 피나스테리드···"인과관계 회의적"
+        url: "https://www.dailymedi.com/detail.php?number=863387&thread=22r05"
     notes: >
       같은 저널에 반박 코멘터리 2편('균형 있는 해석을 위한 재고' 등). 같은 사안에 '유발?'과
       '인과관계 회의적'이 정반대로 붙은 사례. 데일리메디 기사는 반박 코멘터리를 보도한 것일 수 있음

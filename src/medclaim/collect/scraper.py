@@ -24,6 +24,7 @@ from ..utils import (RateLimiter, USER_AGENT, decode_html, log, merge_preserving
 from .outlets import OutletResolver, is_naver_news
 
 GENERIC_BODY_SELECTORS = [
+    "div.article_view section[dmcf-sid]", "div.article_view",   # 다음(v.daum.net) 기사 페이지
     "#article-view-content-div",      # 많은 지역·전문지 CMS(엔디소프트)
     "div[itemprop='articleBody']",
     "#articleBody", "#article_body", "#articeBody", "#articleText", "#article-body",
@@ -96,8 +97,26 @@ def parse_naver_article(html: str) -> dict:
     published = date_el["data-date-time"] if date_el else ""
     logo = soup.select_one(".media_end_head_top_logo img[alt]") or soup.select_one(".press_logo img[alt]")
     outlet = logo["alt"].strip() if logo else _meta(soup, "twitter:creator", "og:article:author").split("|")[0]
-    return {"title": title, "subtitle": summary, "body": body, "published": published,
-            "outlet_name": outlet.strip(), "extractor": "naver"}
+    return {"title": clean_title(title), "subtitle": summary, "body": body, "published": published,
+            "outlet_name": clean_outlet_name(outlet), "extractor": "naver"}
+
+
+def clean_title(title: str, outlet: str = "") -> str:
+    """og:title 의 이중 인코딩(&amp;#39;), 앞머리 '[매체명]', 뒤꼬리 '- 매체명' 을 정리한다."""
+    import html as _html
+    t = _html.unescape(_html.unescape(title or "")).strip()
+    t = re.sub(r"^\[[^\]]{2,15}\]\s*", "", t)
+    return _strip_site_suffix(t, outlet)
+
+
+def clean_outlet_name(name: str) -> str:
+    """'Daum | 연합뉴스' → '연합뉴스', '디지털투데이 (DigitalToday)' → '디지털투데이'."""
+    name = (name or "").strip()
+    if "|" in name:
+        parts = [x.strip() for x in name.split("|") if x.strip()]
+        name = next((x for x in parts if x.lower() not in ("daum", "다음", "네이버", "naver", "nate", "네이트")),
+                    parts[-1] if parts else "")
+    return re.sub(r"\s*\([A-Za-z ]+\)$", "", name).strip()
 
 
 def _strip_site_suffix(title: str, outlet: str) -> str:
@@ -116,7 +135,7 @@ def parse_generic_article(html: str, outlet: str = "") -> dict:
     if not title:
         h1 = soup.find("h1")
         title = h1.get_text(" ", strip=True) if h1 else (soup.title.get_text(strip=True) if soup.title else "")
-    title = _strip_site_suffix(title, outlet)
+    title = clean_title(title, outlet)
 
     best_text, best_sel = "", ""
     for sel in GENERIC_BODY_SELECTORS:
@@ -147,8 +166,11 @@ def parse_generic_article(html: str, outlet: str = "") -> dict:
         m = DATE_TEXT.search(soup.get_text(" "))
         if m:
             published = f"{m.group(2)}-{int(m.group(3)):02d}-{int(m.group(4)):02d}"
+    m14 = re.fullmatch(r"(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})", published or "")
+    if m14:   # 다음 og:regDate 형식 20240107101538
+        published = f"{m14[1]}-{m14[2]}-{m14[3]}T{m14[4]}:{m14[5]}"
     return {"title": title, "subtitle": _meta(soup, "og:description")[:200], "body": best_text,
-            "published": published, "outlet_name": _meta(soup, "og:site_name"),
+            "published": published, "outlet_name": clean_outlet_name(_meta(soup, "og:site_name")),
             "extractor": f"generic:{best_sel}"}
 
 

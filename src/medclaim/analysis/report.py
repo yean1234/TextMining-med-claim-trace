@@ -17,6 +17,7 @@ from ..nlp.tokenize import Tokenizer  # noqa: E402
 from ..paths import Workspace  # noqa: E402
 from ..utils import log, read_csv, read_jsonl, write_csv  # noqa: E402
 from . import classify, comments, compare, textmining  # noqa: E402
+from .feasibility import feasibility_table  # noqa: E402
 from .dataset import build_dataset  # noqa: E402
 
 OUTLET_COLORS = {"wire": "#4C78A8", "national_daily": "#F58518", "economic_daily": "#54A24B",
@@ -228,7 +229,17 @@ def run_analysis(ws: Workspace, source: str = "final", paper_auto_fallback: bool
     paper_src = df.drop_duplicates("bundle_id")["paper_code_source"].value_counts().to_dict()
     md: list[str] = []
     md.append("# 결과 리포트 — 약물 부작용 연구의 온라인 전달 과정\n")
-    md.append(f"_생성: {datetime.now():%Y-%m-%d %H:%M} · 기사 코드 출처: `{source}` · 논문 코드 출처: {paper_src}_\n")
+    coders = ""
+    if source == "final" and ws.final_coding_csv.exists():
+        fc = read_csv(ws.final_coding_csv)
+        coders = ", ".join(sorted(set(fc.get("coders", pd.Series(dtype=str)).astype(str)) - {""}))
+    checked = ", ".join(sorted(set(df.get("paper_checked_by", pd.Series(dtype=str)).astype(str)) - {""}))
+    md.append(f"_생성: {datetime.now():%Y-%m-%d %H:%M} · 기사 코드 출처: `{source}`"
+              f"{f' (코더: {coders})' if coders else ''} · 논문 코드: {paper_src}"
+              f"{f' (확인: {checked})' if checked else ''}_\n")
+    if "claude" in coders or "claude" in checked:
+        md.append("> ℹ️ 이 리포트의 코딩은 LLM(Claude)이 코드북에 따라 본문을 읽고 매긴 **단일 코더** 값입니다. "
+                  "사람 코더가 일부(20~30%)를 독립 코딩해 κ 로 검증하기 전까지는 예비 결과로만 쓰세요.\n")
     if synthetic:
         md.append("> ⚠️ **합성(가짜) 데이터 데모입니다.** 약물·매체·기사·댓글이 모두 지어낸 것이며, 아래 수치는 "
                   "파이프라인이 돌아가는지 보여줄 뿐 아무 의미가 없습니다.\n")
@@ -248,6 +259,12 @@ def run_analysis(ws: Workspace, source: str = "final", paper_auto_fallback: bool
     if "final_status" in df.columns:
         md.append(f"- 최종 코드 상태: {df['final_status'].value_counts().to_dict()}")
     md.append("")
+
+    feas = feasibility_table(ws, list(bundles.values()), df, cond_long, per_art, agreement)
+    write_csv(feas, ws.tables_dir / "feasibility.csv")
+    md.append("### 0-1. 실행 가능성 점검 (파일럿)\n")
+    md.append("기준은 잠정값입니다. 숫자보다 '어디가 병목인지'를 보세요.\n")
+    md.append(df_to_md(feas))
 
     md.append("## 1. 코딩 신뢰도\n")
     md.append("코더 간 일치도(Cohen's κ, 순서형은 선형 가중 κ)와 자동 사전 코딩 vs 사람 일치도.\n")

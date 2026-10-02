@@ -151,8 +151,9 @@ def finalize(ws: Workspace, coders: list[str]) -> pd.DataFrame:
                 statuses.add("UNRESOLVED")
         status_col.append(",".join(sorted(statuses)))
     base["final_status"] = status_col
+    base["coders"] = "+".join(c for c in coders if ws.coding_csv(c).exists())
     keep = ["article_id", "bundle_id", "outlet", "outlet_type", "published", "title"] + \
-        ARTICLE_HUMAN_COLS + ["final_status"]
+        ARTICLE_HUMAN_COLS + ["final_status", "coders"]
     final = base[[c for c in keep if c in base.columns]]
     write_csv(final, ws.final_coding_csv)
     n_unres = int(final["final_status"].str.contains("UNRESOLVED").sum())

@@ -1,0 +1,6 @@
+﻿bundle_id,설계,논문 강도,보도자료 강도,기사 수,제목 강도 min,제목 강도 max,제목 강도 평균,제목 강도 SD,논문보다 강한 제목,매체 유형
+B01_PPI_dementia,observational,2,,3,3,6,5.0,1.41,3,"medical_trade, online"
+B03_APAP_autism_Wan2026,observational,1,,5,1,1,1.0,0.0,0,"economic_daily, medical_trade, national_daily, wire"
+B04_semaglutide_NAION,observational,2,,4,2,6,5.0,1.73,3,"medical_trade, online, wire"
+B05_semaglutide_suicidality,observational,2,,3,1,1,1.0,0.0,0,"economic_daily, health_consumer, medical_trade"
+B06_finasteride_depression,review,5,,3,6,6,6.0,0.0,3,"economic_daily, health_consumer, online"

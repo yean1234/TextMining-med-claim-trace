@@ -13,8 +13,11 @@
 | **RQ2** 본문에는 있는 연구 대상·용량·한계가 제목에는 빠지는가? | 논문별 '핵심 조건' 범주가 제목/리드/본문에 남았는지 + 사람의 '오해 유발' 판정 | 조건 유지율 히트맵, 제목에서만 빠진 비율 |
 | **RQ3** 조건이 생략되거나 단정적인 제목이 붙은 기사에서 댓글의 불안·불신 표현이 더 많은가? | 댓글 반응 사전(불안·불신·안심) → 기사 단위 비율 | 강한 제목 vs 아닌 제목의 댓글 반응 차이(묶음 부트스트랩 CI) |
 
-> ⚠️ **먼저 [LIMITATIONS.md](LIMITATIONS.md)를 읽어 주세요.** 이 코드의 수집기는 개발 환경에서 외부 네트워크가 막혀
-> 실제 사이트로는 실행해 보지 못했고(가짜 응답·가짜 HTML로만 테스트), 자동 코딩은 '사람 코딩 보조용 제안값'입니다.
+> 📊 **파일럿 결과(2026-10-02, 실제 기사 18건): [docs/pilot/README.md](docs/pilot/README.md)** — 실행 가능성 점검표, 인사이트,
+> 리포트 읽는 법, 팀원 공유용 요약이 있습니다.
+>
+> ⚠️ [LIMITATIONS.md](LIMITATIONS.md)도 함께 읽어 주세요. 파일럿의 연결 판정·코딩은 LLM(Claude) 단일 코더 값이고,
+> 네이버 API 수집은 아직 실제 키로 실행해 보지 않았습니다.
 
 ---
 
@@ -69,9 +72,24 @@ python -m pytest -q                    # 테스트
 
 ## 4. 실제 실행 순서
 
-```bash
-cp .env.example .env    # NAVER_CLIENT_ID / NAVER_CLIENT_SECRET / CROSSREF_MAILTO 입력
-```
+### 네이버 API 키
+
+| 환경변수 | 값 |
+|---|---|
+| `NAVER_CLIENT_ID` | Client ID |
+| `NAVER_CLIENT_SECRET` | Client Secret |
+| `NAVER_API_BACKEND` | `hub`(기본, 네이버 클라우드 **NAVER API HUB** 키) 또는 `openapi`(옛 developers.naver.com 키) |
+| `NAVER_DAILY_CALL_BUDGET` | 하루 호출 상한, 기본 `1000` (검색 API 상한은 일 25,000건) |
+| `CROSSREF_MAILTO` | (선택) 연락 이메일 |
+
+- 로컬: `cp .env.example .env` 후 값 입력 (`.env` 는 git 에 안 올라감).
+- Claude Code 클라우드 세션: 세션 제목 표시줄의 환경 메뉴 → Edit → 환경변수에 위 이름으로 입력 (새 세션부터 적용).
+  키를 채팅창에 붙여넣지 마세요.
+- **호출 수 관리**: 실행 전 `search-news --estimate` / `discover --estimate` 로 예상 호출 수를 확인할 수 있습니다
+  (묶음 6개 검색 ≈ 78건, discover ≈ 132건). 호출마다 `data/interim/naver_api_usage.json` 에 하루 누적이 기록되고,
+  상한에 닿으면 **요청을 보내기 전에** 멈춥니다. 숨은 재요청이 없도록 자동 재시도도 꺼 두었습니다.
+- 네이버 API 없이도: 웹 검색 등으로 찾은 기사 URL 을 `bundles.yaml` 의 `known_articles` 에 적고
+  `seed-candidates` 를 실행하면 후보로 들어갑니다(파일럿은 이 방식).
 
 | 단계 | 명령 | 사람이 할 일 | 산출물 |
 |---|---|---|---|
@@ -79,6 +97,7 @@ cp .env.example .env    # NAVER_CLIENT_ID / NAVER_CLIENT_SECRET / CROSSREF_MAILT
 | 1 | `python -m medclaim discover` | `annotation/bundle_candidates.csv`에서 기사 3건 이상 붙은 (약물, 결과, 저널) 조합을 골라 원논문을 확인하고 `config/bundles.yaml`에 추가 | bundle_candidates.csv |
 | 2 | `python -m medclaim fetch-papers` | `fetch_status` 확인. B03처럼 DOI 없이 제목으로 찾은 논문은 맞는 논문인지 확인 | data/interim/papers.csv |
 | 3 | `python -m medclaim search-news` | **`annotation/article_candidates.csv`**: `relevance_score` 높은 순으로 보면서 `include`(Y/N), `link_type`(main/background/unrelated), `paper_match_evidence`(저널명·연구팀 언급 등) 입력. 같은 약물·결과를 다룬 **다른 논문** 기사(예: B02↔B03, B06 반박 코멘터리)를 반드시 가려낼 것 | article_candidates.csv |
+| 3'' | `python -m medclaim seed-candidates` | (API 없이) `bundles.yaml` 의 `known_articles` URL 을 후보로 추가 | article_candidates.csv |
 | 3' | `python -m medclaim import-bigkinds 파일.xlsx --bundle B01_PPI_dementia` | (선택) 네이버 API는 날짜 필터가 없어 오래된 기사를 놓칠 수 있음 → BigKinds에서 기간 지정 검색 후 엑셀을 추가 | article_candidates.csv |
 | 4 | `python -m medclaim scrape` | **`annotation/article_text_check.csv`**: `flag`가 ok가 아닌 기사는 `annotation/manual_texts/<article_id>.txt`에 원문을 붙여넣고(첫 줄 제목) 다시 `scrape`. 본문이 잘못 잡혔으면 `text_ok=N` | data/interim/articles.jsonl |
 | 5 | `python -m medclaim collect-comments --i-accept-naver-terms` | (선택, RQ3) 비공식 엔드포인트 — 주의사항 확인 | data/interim/comments.jsonl |

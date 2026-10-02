@@ -24,3 +24,6 @@ annotation/manual_texts/*
 !annotation/manual_texts/README.md
 
 .DS_Store
+
+# 본문 앞뒤 발췌가 들어 있는 점검표는 로컬에서만 사용 (레포가 공개 상태)
+annotation/article_text_check.csv

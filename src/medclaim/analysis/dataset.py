@@ -58,9 +58,10 @@ def load_papers(ws: Workspace, allow_auto: bool) -> pd.DataFrame:
     out["design"] = pick("design", "design_auto")
     out["key_conditions"] = papers.get("key_conditions", pd.Series("", index=papers.index))
     out["press_release_strength"] = papers.get("press_release_strength", pd.Series("", index=papers.index))
+    out["paper_checked_by"] = papers.get("checked_by", pd.Series("", index=papers.index))
     out["paper_code_source"] = np.where(
         papers.get("paper_strength", pd.Series("", index=papers.index)).astype(str).str.strip() != "",
-        "human", "auto" if allow_auto else "missing")
+        "coded", "auto" if allow_auto else "missing")
     return out
 
 

@@ -30,10 +30,11 @@ class FakeResp:
 
 class FakeSession:
     def __init__(self, pages):
-        self.pages, self.calls = pages, []
+        self.pages, self.calls, self.headers = pages, [], []
 
     def get(self, url, params=None, headers=None, timeout=None):
         self.calls.append(params)
+        self.headers.append(headers)
         return FakeResp(self.pages[len(self.calls) - 1])
 
 
@@ -43,16 +44,36 @@ def _bundle():
                   date_from=date(2023, 8, 9), date_to=date(2023, 10, 31))
 
 
-def test_naver_search_pagination():
-    page1 = {"total": 150, "items": [{"title": f"<b>PPI</b> 치매 {i}", "originallink": f"https://www.yna.co.kr/{i}",
+def test_naver_search_pagination_hub_fields():
+    from medclaim.collect.naver import NaverClient
+    # API HUB 는 original_link / pub_date 처럼 필드명이 다를 수 있다 → 정규화 확인
+    page1 = {"total": 150, "items": [{"title": f"<b>PPI</b> 치매 {i}", "original_link": f"https://www.yna.co.kr/{i}",
                                       "link": f"https://n.news.naver.com/mnews/article/001/{i:010d}",
-                                      "description": "연구", "pubDate": "Thu, 10 Aug 2023 09:00:00 +0900"}
+                                      "description": "연구", "pub_date": "Thu, 10 Aug 2023 09:00:00 +0900"}
                                      for i in range(100)]}
     page2 = {"total": 150, "items": page1["items"][:50]}
     s = FakeSession([page1, page2])
-    items = search_news(s, "PPI 치매", "id", "secret", max_results=300)
+    client = NaverClient("id", "secret", backend="hub", session=s, delay=0)
+    items = search_news(client, "PPI 치매", max_results=300)
     assert len(items) == 150
     assert s.calls[1]["start"] == 101
+    assert items[0]["originallink"] == "https://www.yna.co.kr/0" and items[0]["pubDate"].startswith("Thu")
+    assert s.headers[0]["X-NCP-APIGW-API-KEY-ID"] == "id"
+    assert client.budget.used_today == 2
+
+
+def test_call_budget_stops_before_limit(tmp_path):
+    import pytest
+
+    from medclaim.collect.naver import BudgetExceeded, CallBudget, NaverClient
+    budget = CallBudget(tmp_path / "usage.json", daily_limit=2)
+    page = {"total": 1000, "items": [{"title": "x"}] * 100}
+    s = FakeSession([page] * 5)
+    client = NaverClient("id", "secret", budget=budget, session=s, delay=0)
+    with pytest.raises(BudgetExceeded):
+        search_news(client, "q", max_results=500)
+    assert len(s.calls) == 2                                  # 상한에서 요청 전에 멈춤
+    assert CallBudget(tmp_path / "usage.json", 2).used_today == 2   # 파일에 기록돼 다음 실행에도 유지
 
 
 def test_items_to_candidates_and_dedupe():
@@ -85,7 +106,7 @@ def test_outlet_resolver_longest_domain():
 def test_parse_naver_article():
     html = (FIXTURES / "naver_article.html").read_text(encoding="utf-8")
     a = parse_naver_article(html)
-    assert a["title"] == "[테스트] 가상약, 가상 부작용 위험 높여"
+    assert a["title"] == "가상약, 가상 부작용 위험 높여"   # 앞머리 [태그] 제거
     assert a["outlet_name"] == "예시일보"
     assert a["published"].startswith("2026-01-16")
     assert "1.5배 높은 것으로" in a["body"]
@@ -96,7 +117,7 @@ def test_parse_naver_article():
 def test_parse_generic_article():
     html = (FIXTURES / "generic_article.html").read_text(encoding="utf-8")
     a = parse_generic_article(html, outlet="예시메디칼")
-    assert a["title"] == "[테스트] 가상약 장기 복용시 가상 부작용 위험 1.5배"
+    assert a["title"] == "가상약 장기 복용시 가상 부작용 위험 1.5배"
     assert a["extractor"] == "generic:#article-view-content-div"
     assert "코호트 연구" in a["body"] and "임의로 복용을 중단" in a["body"]
     assert "이미지투데이" not in a["body"] and "무단전재" not in a["body"] and "메뉴" not in a["body"]
@@ -165,3 +186,11 @@ def test_candidates_rerun_keeps_human_include_and_bigkinds(tmp_path):
     out = import_bigkinds(ws, bk, _bundle()).set_index("source")
     assert out.at["bigkinds", "outlet"] == "연합뉴스" and out.at["bigkinds", "pub_date"] == "2023-08-11"
     assert read_csv(ws.candidates_csv).set_index("candidate_id").at["c1", "include"] == "Y"
+
+
+def test_clean_title_and_outlet():
+    from medclaim.collect.scraper import clean_outlet_name, clean_title
+    assert clean_title("[메디칼타임즈] PPI제제 장기 복용시 치매 위험") == "PPI제제 장기 복용시 치매 위험"
+    assert clean_title("위고비·삭센다 치료 중 &amp;#39;시력 손실&amp;#39; 부작용") == "위고비·삭센다 치료 중 '시력 손실' 부작용"
+    assert clean_outlet_name("Daum | 연합뉴스") == "연합뉴스"
+    assert clean_outlet_name("디지털투데이 (DigitalToday)") == "디지털투데이"

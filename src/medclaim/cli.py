@@ -5,6 +5,7 @@
   discover          (선택) 새 묶음 후보 찾기 → ★ bundles.yaml 에 추가
   fetch-papers      논문 메타데이터·초록
   search-news       네이버 뉴스 후보 → ★ article_candidates.csv 의 include/link_type
+  seed-candidates   (API 없이) bundles.yaml 의 known_articles URL 을 후보로 추가
   import-bigkinds   (선택) BigKinds 엑셀을 후보에 추가
   scrape            본문 수집 → ★ article_text_check.csv (실패 기사는 manual_texts 에 붙여넣기)
   collect-comments  (선택) 네이버 댓글
@@ -42,11 +43,17 @@ def _bundles(ws: Workspace, only: str | None = None):
     return bundles
 
 
-def _naver_keys() -> tuple[str, str]:
+def _naver_client(ws: Workspace):
+    """환경변수로 네이버 클라이언트를 만든다. 키 값은 로그에 남기지 않는다."""
+    from .collect.naver import DEFAULT_DAILY_BUDGET, CallBudget, NaverClient
     cid, secret = os.environ.get("NAVER_CLIENT_ID", ""), os.environ.get("NAVER_CLIENT_SECRET", "")
     if not cid or not secret:
-        sys.exit("NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 가 필요합니다 (.env.example 참고).")
-    return cid, secret
+        sys.exit("NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 환경변수가 필요합니다 (README '네이버 API 키' 참고).")
+    backend = os.environ.get("NAVER_API_BACKEND", "hub").strip().lower()
+    limit = int(os.environ.get("NAVER_DAILY_CALL_BUDGET", DEFAULT_DAILY_BUDGET))
+    budget = CallBudget(ws.interim_dir / "naver_api_usage.json", limit)
+    log.info("네이버 API backend=%s, 오늘 사용 %d / 상한 %d건", backend, budget.used_today, limit)
+    return NaverClient(cid, secret, backend=backend, budget=budget)
 
 
 # ------------------------------------------------------------------ 명령
@@ -76,9 +83,14 @@ def cmd_status(args) -> None:
 
 
 def cmd_discover(args) -> None:
-    from .collect.discover import discover_bundles
-    cid, secret = _naver_keys()
-    discover_bundles(_ws(args), get_session(), cid, secret, args.max_per_query)
+    from .collect.discover import discover_bundles, estimate_discovery_calls
+    ws = _ws(args)
+    n = estimate_discovery_calls(ws, args.max_per_query)
+    print(f"예상 네이버 API 호출: 최대 {n}건 (일 상한 25,000건)")
+    if args.estimate:
+        return
+    ws.ensure_dirs()
+    discover_bundles(ws, _naver_client(ws), args.max_per_query)
 
 
 def cmd_fetch_papers(args) -> None:
@@ -89,11 +101,22 @@ def cmd_fetch_papers(args) -> None:
 
 
 def cmd_search_news(args) -> None:
-    from .collect.naver import collect_candidates
+    from .collect.naver import collect_candidates, estimate_calls
     ws = _ws(args)
-    cid, secret = _naver_keys()
+    bundles = _bundles(ws, args.bundle)
+    n = estimate_calls(sum(len(b.queries) for b in bundles), args.max_per_query)
+    print(f"예상 네이버 API 호출: 최대 {n}건 (묶음 {len(bundles)}개, 일 상한 25,000건)")
+    if args.estimate:
+        return
     ws.ensure_dirs()
-    collect_candidates(ws, _bundles(ws, args.bundle), get_session(), cid, secret, args.max_per_query, args.sort)
+    collect_candidates(ws, bundles, _naver_client(ws), args.max_per_query, args.sort)
+
+
+def cmd_seed_candidates(args) -> None:
+    from .collect.naver import seed_candidates
+    ws = _ws(args)
+    ws.ensure_dirs()
+    seed_candidates(ws, _bundles(ws, args.bundle))
 
 
 def cmd_import_bigkinds(args) -> None:
@@ -173,6 +196,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("discover", help="새 묶음 후보 찾기 (네이버 API)")
     s.add_argument("--max-per-query", type=int, default=None)
+    s.add_argument("--estimate", action="store_true", help="호출하지 않고 예상 API 호출 수만 출력")
     s.set_defaults(func=cmd_discover)
 
     s = sub.add_parser("fetch-papers", help="논문 메타데이터·초록 (Crossref, Europe PMC)")
@@ -185,7 +209,12 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--bundle")
     s.add_argument("--max-per-query", type=int, default=300)
     s.add_argument("--sort", choices=["sim", "date"], default="sim")
+    s.add_argument("--estimate", action="store_true", help="호출하지 않고 예상 API 호출 수만 출력")
     s.set_defaults(func=cmd_search_news)
+
+    s = sub.add_parser("seed-candidates", help="API 없이 bundles.yaml 의 known_articles URL 을 후보로 추가")
+    s.add_argument("--bundle")
+    s.set_defaults(func=cmd_seed_candidates)
 
     s = sub.add_parser("import-bigkinds", help="BigKinds 엑셀 → 기사 후보")
     s.add_argument("file")

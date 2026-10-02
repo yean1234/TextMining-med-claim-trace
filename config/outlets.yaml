@@ -35,6 +35,8 @@ outlets:
   - {name: 헤럴드경제, type: economic_daily, domains: [heraldcorp.com], naver_oid: "016"}
   - {name: 아시아경제, type: economic_daily, domains: [asiae.co.kr], naver_oid: "277"}
   - {name: 뉴스핌, type: economic_daily, domains: [newspim.com]}
+  - {name: 조선비즈, type: economic_daily, domains: [biz.chosun.com], naver_oid: "366"}
+  - {name: 디지털투데이, type: online, domains: [digitaltoday.co.kr]}
   - {name: KBS, type: broadcast, domains: [kbs.co.kr], naver_oid: "056"}
   - {name: MBC, type: broadcast, domains: [imbc.com], naver_oid: "214"}
   - {name: SBS, type: broadcast, domains: [sbs.co.kr], naver_oid: "055"}
@@ -58,6 +60,10 @@ outlets:
   - {name: 헬스코리아뉴스, type: medical_trade, domains: [hkn24.com]}
   - {name: 약업신문, type: medical_trade, domains: [yakup.com]}
   - {name: 메디게이트뉴스, type: medical_trade, domains: [medigatenews.com]}
+  - {name: 팜뉴스, type: medical_trade, domains: [pharmnews.com]}
+  - {name: 메디코파마, type: medical_trade, domains: [medicopharma.co.kr]}
+  - {name: 더메디컬, type: medical_trade, domains: [themedical.kr]}
+  - {name: 의약일보, type: medical_trade, domains: [medicaldaily.co.kr]}
   - {name: 하이닥, type: health_consumer, domains: [hidoc.co.kr]}
   - {name: 코메디닷컴, type: health_consumer, domains: [kormedi.com], naver_oid: "296"}
   - {name: 헬스조선, type: health_consumer, domains: [health.chosun.com], naver_oid: "346"}
@@ -70,3 +76,6 @@ outlets:
   - {name: 오마이뉴스, type: online, domains: [ohmynews.com], naver_oid: "047"}
   - {name: 프레시안, type: online, domains: [pressian.com], naver_oid: "002"}
   - {name: 데일리안, type: online, domains: [dailian.co.kr], naver_oid: "119"}
+  - {name: 더사이언스플러스, type: online, domains: [thescienceplus.com]}
+  - {name: US메트로뉴스, type: online, domains: [usmetronews.com]}
+  - {name: 라디오코리아, type: online, domains: [radiokorea.com]}

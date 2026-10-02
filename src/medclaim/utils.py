@@ -45,9 +45,10 @@ def load_dotenv(path: Path) -> None:
 
 
 # ---------------------------------------------------------------- HTTP
-def get_session(user_agent: str = USER_AGENT) -> requests.Session:
+def get_session(user_agent: str = USER_AGENT, retries: int = 3) -> requests.Session:
+    """retries=0 이면 자동 재시도를 끈다 (호출 수가 과금·한도에 잡히는 API용: 숨은 재요청 방지)."""
     session = requests.Session()
-    retry = Retry(total=3, backoff_factor=1.5, status_forcelist=(429, 500, 502, 503, 504),
+    retry = Retry(total=retries, backoff_factor=1.5, status_forcelist=(429, 500, 502, 503, 504),
                   allowed_methods=("GET",))
     adapter = HTTPAdapter(max_retries=retry)
     session.mount("https://", adapter)
