@@ -14,6 +14,11 @@ journals:
   Science: [Science, 사이언스]
   PLOS ONE: [PLOS ONE, PLoS One, 플로스원]
   Diabetes Care: [Diabetes Care, 다이아비티스 케어]
+  JAMA Psychiatry: [JAMA Psychiatry, 자마 정신의학, JAMA 정신의학, 미국의사협회 정신의학]
+  JAMA Otolaryngology: [JAMA Otolaryngology, JAMA 이비인후과, 자마 이비인후과, 미국의사협회 이비인후과]
+  Regional Anesthesia & Pain Medicine: [Regional Anesthesia & Pain Medicine, Regional Anesthesia and Pain Medicine, 지역마취 및 통증의학, 국소마취 및 통증의학]
+  Arthritis Care & Research: [Arthritis Care & Research, Arthritis Care and Research, 관절염 치료 및 연구, 관절염 관리와 연구]
+  PLOS Medicine: [PLOS Medicine, PLoS Medicine, 플로스 메디슨, 플로스메디슨, 플로스 메디신]
   Gut: [Gut, 거트]
   # 출처 표기 오류 탐지용: 저널이 아닌데 저널처럼 인용되는 이름
   _not_journal: [Psychiatrist.com, 메디컬익스프레스, Medical Xpress, 사이언스데일리, ScienceDaily, 유레칼러트, EurekAlert, 헬스데이, HealthDay]

@@ -53,6 +53,24 @@ def test_segment_skips_byline_and_caption():
     assert all("게티이미지" not in s for s in seg["sentences"])
 
 
+def test_segment_skips_article_head():
+    # 뉴시스형: 제목 반복 + 등록 시각 + 포털 UI 글자 + 사진 설명 줄
+    title = '"약 먹으면 9년 더 산다고?"…연구진이 새로 발견 효과'
+    body = ('"약 먹으면 9년 더 산다고?"…연구진이 새로 발견 효과\n등록 2026.09.07 15:00:00수정 2026.09.07 15:08:24\n'
+            "구글에서 선호하는 매체로 추가\n작게\n크게\n[서울=뉴시스] 사진 설명 문장이다. (사진=유토이미지) *재판매 및 DB 금지\n"
+            "[서울=뉴시스]홍길동 인턴 기자 = 약이 수명을 늘릴 수 있다는 연구 결과가 나왔다.\n두 번째 문장이다.")
+    seg = segment_article(title, body)
+    assert seg["lead_sentences"][0].startswith("약이 수명을")
+    # 메디컬투데이형 고정 문구 + 부제 + 광고 자리표시
+    body2 = ("Global Health Pick은 메디컬투데이와 아임닥터가 엄선한 의료인 자문기자단의 검토를 거쳐 제작되는 의료 콘텐츠입니다.\n"
+             "최신 의학 정보와 근거 중심의 검증 과정을 바탕으로 독자 여러분께 정확하고 신뢰할 수 있는 건강 정보를 제공합니다.\n"
+             "학술지에 대규모 연구 결과 게재\nAdvertisement Advertisement\n"
+             "[mdtoday=홍길동 기자] 가바펜틴을 6회 이상 처방받으면 치매 위험이 증가한다는 연구 결과가 나왔다.\n둘째 문장이다.")
+    seg2 = segment_article("가바펜틴, 치매 위험 높여", body2)
+    assert seg2["lead_sentences"][0].startswith("가바펜틴을")
+    assert len(seg2["lead_sentences"]) == 2
+
+
 def test_split_sentences():
     assert len(split_sentences("첫 문장이다. 두 번째 문장이다.")) == 2
 

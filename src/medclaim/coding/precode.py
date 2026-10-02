@@ -15,6 +15,7 @@ from collections import defaultdict
 import pandas as pd
 
 from ..bundles import Bundle, bundle_map
+from ..collect.outlets import OutletResolver
 from ..nlp.lexicon import Lexicon
 from ..paths import Workspace
 from ..utils import load_yaml, log, merge_preserving, read_csv, read_jsonl, write_csv
@@ -129,6 +130,11 @@ def build_article_features(ws: Workspace, bundles: list[Bundle], max_per_bundle:
     journals = JournalMatcher(load_yaml(ws.config_file("journals.yaml")))
     bmap = bundle_map(bundles)
     arts = usable_articles(ws)
+    resolver = OutletResolver(ws.config_file("outlets.yaml"))
+    for a in arts:   # 매체 분류는 항상 최신 outlets.yaml 기준
+        name, otype = resolver.resolve(a.get("url", ""), a.get("outlet", ""))
+        if otype != "unknown":
+            a["outlet"], a["outlet_type"] = name, otype
     sel = select_articles(arts, max_per_bundle, seed)
     write_csv(sel, ws.selection_csv)
     chosen = set(sel.loc[sel["selected"] == "Y", "article_id"])

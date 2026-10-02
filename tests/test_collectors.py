@@ -194,3 +194,23 @@ def test_clean_title_and_outlet():
     assert clean_title("위고비·삭센다 치료 중 &amp;#39;시력 손실&amp;#39; 부작용") == "위고비·삭센다 치료 중 '시력 손실' 부작용"
     assert clean_outlet_name("Daum | 연합뉴스") == "연합뉴스"
     assert clean_outlet_name("디지털투데이 (DigitalToday)") == "디지털투데이"
+
+
+def test_robots_respects_ai_crawler_rules():
+    from medclaim.collect.scraper import RobotsCache
+
+    class RobotsSession:
+        def __init__(self, text):
+            self.text = text
+
+        def get(self, url, timeout=None):
+            r = FakeResp(None)
+            r.text = self.text
+            return r
+
+    open_site = RobotsCache(RobotsSession("User-agent: *\nDisallow: /admin/\n"))
+    assert open_site.blocked_by("https://a.example/news/1") == ""
+    ai_blocked = RobotsCache(RobotsSession("User-agent: ClaudeBot\nDisallow: /\n\nUser-agent: *\nDisallow: /admin/\n"))
+    assert ai_blocked.blocked_by("https://b.example/news/1") == "ClaudeBot"
+    assert not ai_blocked.allowed("https://b.example/news/1")
+    assert RobotsCache(RobotsSession("User-agent: ClaudeBot\nDisallow: /\n"), respect=False).allowed("https://c.example/x")

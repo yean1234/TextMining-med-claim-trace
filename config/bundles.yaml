@@ -63,34 +63,23 @@ bundles:
       first_author: Ahlqvist
       published: "2024-04-09"
     search:
-      queries: ["임신 타이레놀 자폐", "아세트아미노펜 임신 자폐 스웨덴", "타이레놀 자폐 형제", "임신 중 진통제 ADHD 자폐"]
+      queries: ["임신 타이레놀 자폐", "아세트아미노펜 임신 자폐 스웨덴", "타이레놀 자폐 형제", "임신 중 진통제 ADHD 자폐",
+                "카롤린스카 아세트아미노펜 자폐", "드렉셀대 타이레놀 자폐", "임신 중 아세트아미노펜 지적장애",
+                "타이레놀 자폐 248만", "타이레놀 자폐 248만명 추적", "타이레놀 자폐 대규모 데이터 결과"]
       date_from: "2024-04-09"
-      date_to: "2025-12-31"
-    known_articles:   # 웹 검색(2026-10-02)으로 찾은 후보. 어느 논문 보도인지는 본문을 읽고 article_candidates.csv 에서 판정
-      - outlet: 경향신문
-        title_hint: 트럼프 “임신 중 타이레놀, 자녀 자폐 유발”…학계 ‘반론’
-        url: "https://www.khan.co.kr/article/202509232023015/"
-      - outlet: 경향신문
-        title_hint: “타이레놀이 자폐 유발” 트럼프 주장에··· 전문가들 “비과학적이고 무책임한 주장”
-        url: "https://www.khan.co.kr/article/202509231651001"
-      - outlet: 메디칼타임즈
-        title_hint: 연관성 있어도 원인 아냐…타이레놀 자폐 논쟁 결론은?
-        url: "https://www.medicaltimes.com/Mobile/News/NewsView.html?ID=1165509"
-      - outlet: 메디칼타임즈
-        title_hint: 트럼프, 타이레놀 자폐증 경고…전문가들 인과관계 불분명
-        url: "https://www.medicaltimes.com/Mobile/News/NewsView.html?ID=1165365"
-      - outlet: 문화일보
-        title_hint: 타이레놀 괴담?… ‘임신 중 복용’ 증가 시기에 자폐증은 되레 줄어
-        url: "https://www.munhwa.com/article/11545592"
-      - outlet: 하이닥
-        title_hint: 임신 중 타이레놀 복용, 자폐증 발병과 무관...아동 150만 명 분석 결과
-        url: "https://news.hidoc.co.kr/news/articleView.html?idxno=61146"
-      - outlet: 네이트(출처 확인)
-        title_hint: '"임신 중 타이레놀이 자폐 유발?" 대규모 데이터 결과 나왔다'
-        url: "https://m.news.nate.com/view/20260217n08402"
-      - outlet: 네이트(출처 확인)
-        title_hint: '"임신 중 타이레놀, 자폐 유발?"…248만명 추적 결과 나왔다는데'
-        url: "https://m.news.nate.com/view/20260217n06864"
+      # 2024년 보도는 1건뿐. 2026-02-17~18 에 이 논문을 '최근 발표'로 다시 소개한 기사들이 나왔다(22개월 뒤 재보도).
+      # 그 사이 2025-09 트럼프 발언 기사들은 이 논문을 '배경'으로만 인용 → link_type 으로 구분
+      date_to: "2026-02-28"
+    known_articles:   # 2026-10-02 네이버 API(2024년 기간)로는 0건 → 웹 검색으로 찾은 2024년 보도
+      - outlet: 메디칼업저버
+        title_hint: "임신 중 아세트아미노펜 복용, 아동 자폐증 위험과 관련 없다"
+        url: "https://www.monews.co.kr/news/articleView.html?idxno=331338"
+      - outlet: KIMS
+        title_hint: "임신 중 아세트아미노펜, 자폐증, ADHD와 관련성 없어"
+        url: "https://www.kimsonline.co.kr/ResCenter/worldnews/view/3205"
+      - outlet: 한국경제
+        title_hint: "\"임신 중 타이레놀이 자폐 유발?\" 대규모 데이터 결과 나왔다"
+        url: "https://www.hankyung.com/article/2026021785587"
     notes: >
       스웨덴 아동 2,480,797명. 형제자매 대조 시 연관성 소멸(ASD HR 0.98).
       2025-09 트럼프 발언 이후 기사들은 이 논문을 '배경'으로만 인용하는 경우가 많다
@@ -251,6 +240,173 @@ bundles:
       → 이 묶음에 넣을지(link_type) 판단 필요. 하이닥 기사는 저널명을 'Psychiatrist.com'으로 표기
       (실제: The Journal of Clinical Psychiatry) → source_error(출처 표기 부정확) 코딩 예시.
       인사이트 기사는 개인 사연 기사일 수 있음 → 논문 보도인지 확인.
+
+  # ---------------------------------------------------------------------------------------
+  # 2026-10-02 추가: discover 결과 + 웹 검색으로 '국내 보도가 여러 건인 약물 부작용 연구'를 고르고
+  # 원논문 DOI 는 Crossref 로 확인했다.
+  # ---------------------------------------------------------------------------------------
+  - bundle_id: B07_APAP_autism_Lancet2026
+    label: "임신 중 아세트아미노펜 ↔ 자폐·ADHD (체계적 문헌고찰·메타분석, Lancet OGW 2026)"
+    drug_terms: [아세트아미노펜, 타이레놀, 파라세타몰, 해열진통제]
+    outcome_terms: [자폐, 자폐증, 자폐스펙트럼, ADHD, 주의력결핍, 지적장애, 신경발달]
+    paper:
+      doi: "10.1016/s3050-5038(25)00211-0"
+      title: "Prenatal paracetamol exposure and child neurodevelopment: a systematic review and meta-analysis"
+      journal: The Lancet   # 실제 저널: The Lancet Obstetrics, Gynaecology, & Women's Health (기사엔 '랜싯'으로 나옴)
+      first_author: D'Antonio
+      published: "2026-01-16"
+    search:
+      queries: ["랜싯 타이레놀 자폐", "임신 중 타이레놀 자폐 메타분석", "타이레놀 자폐 연관성 없다 트럼프 반박 연구", "임신 중 아세트아미노펜 자폐 랜싯"]
+      date_from: "2026-01-14"
+      date_to: "2026-03-31"
+    known_articles: []
+    notes: "연관 없음(null) 결과의 메타분석. B02·B03 과 같은 질문의 다른 논문 → 같은 쟁점의 논문 3편 비교 가능"
+
+  - bundle_id: B08_ADHD_med_CVD
+    label: "ADHD 치료제 ↔ 심혈관질환 (스웨덴 환자-대조, JAMA Psychiatry 2023)"
+    drug_terms: [ADHD 치료제, ADHD 약, ADHD약, ADHD 약물, 메틸페니데이트, 콘서타, 암페타민, 아토목세틴, 중추신경자극제, 각성제]
+    outcome_terms: [심혈관, 심혈관질환, 고혈압, 동맥질환, 동맥 질환, 심장병, 심부전]
+    paper:
+      doi: "10.1001/jamapsychiatry.2023.4294"
+      title: "Attention-Deficit/Hyperactivity Disorder Medications and Long-Term Risk of Cardiovascular Diseases"
+      journal: JAMA Psychiatry
+      first_author: Zhang
+      published: "2023-11-22"
+    search:
+      queries: ["ADHD 치료제 심혈관질환 위험", "ADHD 약 장기 복용 고혈압", "ADHD 약물 심혈관 27%", "메틸페니데이트 심혈관 위험 스웨덴"]
+      date_from: "2023-11-22"
+      date_to: "2024-02-29"
+    known_articles: []
+    notes: "복용 기간이 길수록 위험 증가(용량·기간 조건) → RQ2 기간 조건 누락 검토용"
+
+  - bundle_id: B09_GLP1_GI_events
+    label: "GLP-1 비만치료제 ↔ 위마비·췌장염·장폐색 (JAMA research letter 2023)"
+    drug_terms: [GLP-1, 세마글루타이드, 위고비, 오젬픽, 리라글루티드, 삭센다, 비만치료제, 비만약, 비만 치료제]
+    outcome_terms: [위마비, 췌장염, 장폐색, 위장관, 소화기, 위 마비, 담도]
+    paper:
+      doi: "10.1001/jama.2023.19574"
+      title: "Risk of Gastrointestinal Adverse Events Associated With Glucagon-Like Peptide-1 Receptor Agonists for Weight Loss"
+      journal: JAMA
+      first_author: Sodhi
+      published: "2023-10-05"
+    search:
+      queries: ["위고비 위마비 위험", "비만치료제 췌장염 장폐색 위험", "GLP-1 위장 부작용 연구", "삭센다 위마비 췌장염"]
+      date_from: "2023-10-05"
+      date_to: "2023-12-31"
+    known_articles: []
+    notes: "보험청구 자료 기반 research letter(짧은 보고). 비만 목적 사용자 한정"
+
+  - bundle_id: B10_gabapentin_dementia
+    label: "가바펜틴 ↔ 치매 (만성 요통 환자 코호트, RAPM 2025)"
+    drug_terms: [가바펜틴, 뉴론틴, 신경병증 통증약, 신경통 약, 신경통약]
+    outcome_terms: [치매, 인지장애, 경도인지장애, 인지 저하]
+    paper:
+      doi: "10.1136/rapm-2025-106577"
+      title: "Risk of dementia following gabapentin prescription in chronic low back pain patients"
+      journal: Regional Anesthesia & Pain Medicine
+      first_author: Eghrari
+      published: "2025-07-10"
+    search:
+      queries: ["가바펜틴 치매", "가바펜틴 치매 위험 허리 통증", "신경통 약 치매 위험 연구"]
+      date_from: "2025-07-10"
+      date_to: "2025-10-31"
+    known_articles:   # 웹 검색 보강
+      - outlet: 전국뉴스
+        title_hint: "가바펜틴 장기 복용, 치매·경도 인지 장애 위험 높여…새 연구 경고"
+        url: "https://www.jeonguknews.co.kr/news/articleView.html?idxno=75476"
+      - outlet: 동아일보
+        title_hint: "“만성 신경통-요통에 가바펜틴 복용, 치매 위험 높인다”"
+        url: "https://m.news.zum.com/articles/99503377"
+    notes: "처방 횟수(6회 이상 등)·연령(35~49세 포함) 조건이 핵심. 같은 저널에 반론 편지 2편(2026)"
+
+  - bundle_id: B11_APAP_elderly_side_effects
+    label: "아세트아미노펜 장기 복용(65세 이상) ↔ 위장출혈·신장·심혈관 (Arthritis Care Res 2024)"
+    drug_terms: [아세트아미노펜, 타이레놀, 파라세타몰, 해열진통제, 진통제]
+    outcome_terms: [위장 출혈, 위장출혈, 소화성 궤양, 위장관, 심부전, 고혈압, 신장, 만성 신장질환, 부작용]
+    paper:
+      doi: "10.1002/acr.25471"
+      title: "Incidence of Side Effects Associated With Acetaminophen in People Aged 65 Years or More: A Prospective Cohort Study Using Data From the Clinical Practice Research Datalink"
+      journal: Arthritis Care & Research
+      first_author: Kaur
+      published: "2024-12-09"
+    search:
+      queries: ["타이레놀 노인 장기 복용 부작용", "아세트아미노펜 고령자 위장 출혈", "파라세타몰 65세 이상 부작용 연구", "타이레놀 장기복용 위장출혈 신장"]
+      date_from: "2024-12-01"
+      date_to: "2025-03-31"
+    known_articles:   # 웹 검색 보강 — 국내 보도가 매우 적음
+      - outlet: 캐어유뉴스
+        title_hint: "시니어들이 아세트아미노펜(타이레놀)에 대해 알아야 할 사항"
+        url: "https://www.careyounews.org/news/articleView.html?idxno=6031"
+    notes: "대상(65세 이상)·기간(반복 처방) 조건이 핵심 → RQ2"
+
+  - bundle_id: B12_hormonal_contraceptive_breast_cancer
+    label: "호르몬 피임약(프로게스틴 단일 포함) ↔ 유방암 (영국 환자-대조, PLOS Med 2023)"
+    drug_terms: [피임약, 경구피임약, 호르몬 피임, 호르몬 피임제, 프로게스틴, 프로게스토겐, 미니필, 피임 주사, 피임 임플란트]
+    outcome_terms: [유방암]
+    paper:
+      doi: "10.1371/journal.pmed.1004188"
+      title: "Combined and progestagen-only hormonal contraceptives and breast cancer risk: A UK nested case-control study and meta-analysis"
+      journal: PLOS Medicine
+      first_author: Fitzpatrick
+      published: "2023-03-21"
+    search:
+      queries: ["피임약 유방암 위험", "프로게스틴 피임약 유방암", "호르몬 피임 유방암 옥스퍼드",
+                "프로게스토겐 유방암", "미니필 유방암", "피임약 유방암 20~30%", "호르몬 피임약 유방암 플로스"]
+      date_from: "2023-03-21"
+      date_to: "2023-06-30"
+    known_articles: []
+    notes: "상대위험 20~30% 증가지만 절대위험 증가는 작다(연령별 15년 초과위험) → 절대·상대위험 전달 비교"
+
+  - bundle_id: B13_semaglutide_lifespan_mice
+    label: "세마글루타이드 ↔ (암컷) 생쥐 노화·수명 (동물실험, Nature 2026)"
+    drug_terms: [세마글루타이드, 위고비, 오젬픽, GLP-1]
+    outcome_terms: [수명, 노화]
+    paper:
+      doi: "10.1038/s41586-026-10940-7"
+      title: "Late-life semaglutide treatment slows ageing and extends lifespan in female mice"
+      journal: Nature
+      first_author: Feng
+      published: "2026-09-02"
+    search:
+      queries: ["위고비 생쥐 수명", "세마글루타이드 노화 수명 연장", "위고비 맞으면 더 산다"]
+      date_from: "2026-09-02"
+      date_to: "2026-09-30"
+    known_articles: []
+    notes: "동물실험(암컷 생쥐) → animal_generalization(동물→인간 일반화) 코딩용. 부작용이 아니라 '효과' 주장이지만 노션 메모의 '생쥐 수명' 예시에 해당"
+
+  - bundle_id: B14_oral_steroid_CRSwNP
+    label: "경구 스테로이드 누적 용량 ↔ 이상반응 (비용종 동반 만성 비부비동염, 국내 연구, JAMA Otolaryngol 2026)"
+    drug_terms: [스테로이드, 경구 스테로이드, 먹는 스테로이드, 코르티코스테로이드, 경구용 스테로이드]
+    outcome_terms: [부작용, 이상반응, 골다공증, 당뇨, 백내장, 녹내장, 골절]
+    paper:
+      doi: "10.1001/jamaoto.2026.1188"
+      title: "Oral Corticosteroids and Adverse Events in Chronic Rhinosinusitis With Nasal Polyps"
+      journal: JAMA Otolaryngology
+      first_author: Moon
+      published: "2026-07-01"
+    search:
+      queries: ["비용종 먹는 스테로이드 부작용", "만성 비부비동염 경구 스테로이드 부작용", "먹는 스테로이드 연간 1g 부작용"]
+      date_from: "2026-06-15"
+      date_to: "2026-08-31"
+    known_articles: []
+    notes: "연간 누적 용량(1g) 조건이 핵심 → RQ2 용량 조건. 국내 연구팀(보도자료 영향 가능)"
+
+  - bundle_id: B15_PPI_migraine
+    label: "위산억제제(PPI·H2 차단제) ↔ 편두통 (NHANES 단면연구, Neurology Clin Pract 2024)"
+    drug_terms: [PPI, 위산억제제, 위산분비억제제, 양성자펌프억제제, 제산제, H2 차단제, 위장약, 역류성 식도염 약, 속쓰림 약]
+    outcome_terms: [편두통, 두통]
+    paper:
+      doi: "10.1212/cpj.0000000000200302"
+      title: "Use of Acid-Suppression Therapy and Odds of Migraine and Severe Headache in the National Health and Nutrition Examination Survey"
+      journal: Neurology   # 실제: Neurology Clinical Practice
+      first_author: Slavin
+      published: "2024-04-24"   # 온라인 공개일(메릴랜드대 보도자료 기준). Crossref 권호 날짜는 2024-06
+    search:
+      queries: ["위산억제제 편두통", "위장약 편두통 위험", "역류성 식도염 약 편두통", "PPI 편두통 위험"]
+      date_from: "2024-04-24"
+      date_to: "2024-06-30"
+    known_articles: []
+    notes: "단면연구(인과 추론 불가) + 오즈비 → '위험 높인다' 같은 인과 표현이 나오는지 보기 좋음"
 
 # ---------------------------------------------------------------------
 # TEMPLATE (복사해서 위 bundles: 목록에 붙여 넣기)

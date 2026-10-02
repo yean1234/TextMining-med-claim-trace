@@ -79,3 +79,40 @@ outlets:
   - {name: 더사이언스플러스, type: online, domains: [thescienceplus.com]}
   - {name: US메트로뉴스, type: online, domains: [usmetronews.com]}
   - {name: 라디오코리아, type: online, domains: [radiokorea.com]}
+  # 2026-10-02 확장 수집에서 추가
+  - {name: 메디소비자뉴스, type: medical_trade, domains: [medisobizanews.com]}
+  - {name: 경기메디뉴스, type: medical_trade, domains: [ggmedinews.com]}
+  - {name: 격주간 의료정보, type: medical_trade, domains: [kmedinfo.co.kr]}
+  - {name: 보건뉴스, type: medical_trade, domains: [bokuennews.com]}
+  - {name: 라포르시안, type: medical_trade, domains: [rapportian.com]}
+  - {name: 메디칼트리뷴, type: medical_trade, domains: [medical-tribune.co.kr]}
+  - {name: KIMS, type: medical_trade, domains: [kimsonline.co.kr]}
+  - {name: 후생신보, type: medical_trade, domains: [whosaeng.com]}
+  - {name: 뉴스더보이스, type: medical_trade, domains: [newsthevoice.com]}
+  - {name: 의사신문, type: medical_trade, domains: [doctorstimes.com]}
+  - {name: 코리아헬스로그, type: health_consumer, domains: [koreahealthlog.com]}
+  - {name: 헬스중앙, type: health_consumer, domains: [jhealthmedia.joins.com]}
+  - {name: 이건강, type: health_consumer, domains: [ikunkang.com]}
+  - {name: 헬스인뉴스, type: health_consumer, domains: [healthinnews.co.kr]}
+  - {name: 조세일보, type: economic_daily, domains: [joseilbo.com]}
+  - {name: 전자신문, type: economic_daily, domains: [etnews.com]}
+  - {name: 이투데이, type: economic_daily, domains: [etoday.co.kr]}
+  - {name: 디지털타임스, type: economic_daily, domains: [dt.co.kr]}
+  - {name: 서울와이어, type: economic_daily, domains: [seoulwire.com]}
+  - {name: 연합뉴스TV, type: broadcast, domains: [yonhapnewstv.co.kr]}
+  - {name: EBS, type: broadcast, domains: [ebs.co.kr]}
+  - {name: KBC광주방송, type: broadcast, domains: [ikbc.co.kr]}
+  - {name: 하이뉴스, type: online, domains: [hinews.co.kr]}
+  - {name: 시사저널, type: online, domains: [sisajournal.com]}
+  - {name: 농민신문, type: online, domains: [nongmin.com]}
+  - {name: 청년일보, type: online, domains: [youthdaily.co.kr]}
+  - {name: 스트레이트뉴스, type: online, domains: [straightnews.co.kr]}
+  - {name: 전국뉴스, type: online, domains: [jeonguknews.co.kr]}
+  - {name: 스포츠조선, type: online, domains: [sportschosun.com]}
+  - {name: 캐어유뉴스, type: online, domains: [careyounews.org]}
+  - {name: 아이뉴스24, type: online, domains: [inews24.com]}
+  - {name: 동아사이언스, type: online, domains: [dongascience.com]}
+  - {name: 쿠키뉴스, type: online, domains: [kukinews.com]}
+  - {name: 주간조선, type: online, domains: [weekly.chosun.com]}
+  - {name: 이로운넷, type: online, domains: [eroun.net]}
+  - {name: 키즈맘, type: online, domains: [kizmom.com]}

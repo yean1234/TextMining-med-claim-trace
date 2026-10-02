@@ -1,6 +1,16 @@
 ﻿bundle_id,설계,논문 강도,보도자료 강도,기사 수,제목 강도 min,제목 강도 max,제목 강도 평균,제목 강도 SD,논문보다 강한 제목,매체 유형
 B01_PPI_dementia,observational,2,,3,3,6,5.0,1.41,3,"medical_trade, online"
-B03_APAP_autism_Wan2026,observational,1,,5,1,1,1.0,0.0,0,"economic_daily, medical_trade, national_daily, wire"
+B02_APAP_autism_Ahlqvist2024,observational,1,,3,1,6,3.33,2.05,2,"economic_daily, medical_trade, online"
+B03_APAP_autism_Wan2026,observational,1,,4,1,1,1.0,0.0,0,"economic_daily, medical_trade, wire"
 B04_semaglutide_NAION,observational,2,,4,2,6,5.0,1.73,3,"medical_trade, online, wire"
 B05_semaglutide_suicidality,observational,2,,3,1,1,1.0,0.0,0,"economic_daily, health_consumer, medical_trade"
 B06_finasteride_depression,review,5,,3,6,6,6.0,0.0,3,"economic_daily, health_consumer, online"
+B07_APAP_autism_Lancet2026,meta,1,,4,1,1,1.0,0.0,0,"economic_daily, national_daily"
+B08_ADHD_med_CVD,observational,2,,4,6,6,6.0,0.0,4,"economic_daily, health_consumer, medical_trade"
+B09_GLP1_GI_events,observational,2,,5,3,6,4.2,1.47,5,"medical_trade, online"
+B10_gabapentin_dementia,observational,2,,3,3,6,5.0,1.41,3,"medical_trade, online"
+B11_APAP_elderly_side_effects,observational,2,,1,6,6,6.0,0.0,1,health_consumer
+B12_hormonal_contraceptive_breast_cancer,observational,2,,2,6,6,6.0,0.0,2,"health_consumer, medical_trade"
+B13_semaglutide_lifespan_mice,animal,6,,4,4,6,5.5,0.87,0,"economic_daily, medical_trade, online, wire"
+B14_oral_steroid_CRSwNP,observational,2,,5,3,6,5.4,1.2,5,"health_consumer, medical_trade, online"
+B15_PPI_migraine,observational,4,,3,2,6,4.67,1.89,2,"health_consumer, medical_trade"

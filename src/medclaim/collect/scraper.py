@@ -9,6 +9,7 @@ robots.txt 를 기본으로 지킨다. 막힌 사이트·추출 실패 기사는
 """
 from __future__ import annotations
 
+import json
 import re
 from datetime import datetime, timezone
 from urllib import robotparser
@@ -129,6 +130,23 @@ def _strip_site_suffix(title: str, outlet: str) -> str:
     return title.strip()
 
 
+FUSION_RE = re.compile(r"Fusion\.globalContent=(\{.*?\});Fusion\.", re.S)
+
+
+def parse_fusion_body(html: str) -> str:
+    """조선일보 등 Arc(Fusion) CMS: 본문이 페이지 안 JSON(Fusion.globalContent)의 content_elements 에 있다."""
+    m = FUSION_RE.search(html)
+    if not m:
+        return ""
+    try:
+        content = json.loads(m.group(1))
+    except ValueError:
+        return ""
+    paras = [BeautifulSoup(e.get("content", ""), "lxml").get_text(" ", strip=True)
+             for e in content.get("content_elements", []) if e.get("type") == "text"]
+    return clean_body("\n".join(p for p in paras if p))
+
+
 def parse_generic_article(html: str, outlet: str = "") -> dict:
     soup = BeautifulSoup(html, "lxml")
     title = _meta(soup, "og:title", "twitter:title")
@@ -137,8 +155,8 @@ def parse_generic_article(html: str, outlet: str = "") -> dict:
         title = h1.get_text(" ", strip=True) if h1 else (soup.title.get_text(strip=True) if soup.title else "")
     title = clean_title(title, outlet)
 
-    best_text, best_sel = "", ""
-    for sel in GENERIC_BODY_SELECTORS:
+    best_text, best_sel = parse_fusion_body(html), "fusion-json"
+    for sel in ([] if len(best_text) >= 300 else GENERIC_BODY_SELECTORS):
         for el in soup.select(sel):
             for rm in REMOVE_SELECTORS:
                 for t in el.select(rm):
@@ -187,6 +205,11 @@ def read_manual_text(ws: Workspace, article_id: str) -> dict | None:
 
 
 # ------------------------------------------------------------------ robots.txt
+# 이 도구는 AI 에이전트(Claude 등)가 대신 돌리는 경우가 있다. 그래서 AI 크롤러를 따로 막아 둔 사이트
+# (예: 'User-agent: ClaudeBot / Disallow: /')도 수집하지 않는다 → 필요하면 사람이 manual_texts 에 붙여넣는다.
+AI_AGENTS = ("ClaudeBot", "anthropic-ai", "Claude-Web", "Claude-User")
+
+
 class RobotsCache:
     def __init__(self, session: requests.Session, respect: bool = True) -> None:
         self.session = session
@@ -194,8 +217,12 @@ class RobotsCache:
         self.cache: dict[str, robotparser.RobotFileParser | None] = {}
 
     def allowed(self, url: str) -> bool:
+        return not self.blocked_by(url)
+
+    def blocked_by(self, url: str) -> str:
+        """url 을 막은 user-agent 이름. 허용이면 ''."""
         if not self.respect:
-            return True
+            return ""
         p = urlparse(url)
         base = f"{p.scheme}://{p.netloc}"
         if base not in self.cache:
@@ -210,7 +237,12 @@ class RobotsCache:
                 rp = None
             self.cache[base] = rp
         rp = self.cache[base]
-        return True if rp is None else rp.can_fetch(USER_AGENT, url)
+        if rp is None:
+            return ""
+        for agent in (USER_AGENT, *AI_AGENTS):
+            if not rp.can_fetch(agent, url):
+                return agent
+        return ""
 
 
 # ------------------------------------------------------------------ 실행
@@ -253,8 +285,10 @@ def scrape_articles(ws: Workspace, session: requests.Session, use_auto: bool = F
             for url, kind in ((c.get("url", ""), "generic"), (c.get("naver_url", ""), "naver")):
                 if not url:
                     continue
-                if not robots.allowed(url):
-                    status = f"robots_disallowed:{urlparse(url).netloc}"
+                blocked = robots.blocked_by(url)
+                if blocked:
+                    ai = "" if blocked == USER_AGENT else f"(AI 크롤러 차단: {blocked})"
+                    status = f"robots_disallowed:{urlparse(url).netloc}{ai}"
                     continue
                 try:
                     limiter.wait()

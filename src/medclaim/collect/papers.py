@@ -231,5 +231,11 @@ def fetch_papers(ws: Workspace, bundles: list[Bundle], session: requests.Session
         })
         log.info("논문 %s: %s", b.bundle_id, rows[-1]["fetch_status"])
     df = pd.DataFrame(rows)
+    if ws.papers_csv.exists():   # --bundle 로 일부만 돌려도 다른 묶음 행은 보존
+        from ..utils import read_csv
+        old = read_csv(ws.papers_csv)
+        if "bundle_id" in old.columns:
+            df = pd.concat([old[~old["bundle_id"].isin(df["bundle_id"])], df], ignore_index=True)
+            df = df.sort_values("bundle_id").reset_index(drop=True)
     write_csv(df, ws.papers_csv)
     return df

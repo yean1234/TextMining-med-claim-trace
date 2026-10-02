@@ -13,11 +13,11 @@
 | **RQ2** 본문에는 있는 연구 대상·용량·한계가 제목에는 빠지는가? | 논문별 '핵심 조건' 범주가 제목/리드/본문에 남았는지 + 사람의 '오해 유발' 판정 | 조건 유지율 히트맵, 제목에서만 빠진 비율 |
 | **RQ3** 조건이 생략되거나 단정적인 제목이 붙은 기사에서 댓글의 불안·불신 표현이 더 많은가? | 댓글 반응 사전(불안·불신·안심) → 기사 단위 비율 | 강한 제목 vs 아닌 제목의 댓글 반응 차이(묶음 부트스트랩 CI) |
 
-> 📊 **파일럿 결과(2026-10-02, 실제 기사 18건): [docs/pilot/README.md](docs/pilot/README.md)** — 실행 가능성 점검표, 인사이트,
-> 리포트 읽는 법, 팀원 공유용 요약이 있습니다.
+> 📊 **파일럿 결과(2026-10-02, 묶음 15개 · 실제 기사 51건): [docs/pilot/README.md](docs/pilot/README.md)** — 실행 가능성
+> 점검표, 인사이트, 리포트 읽는 법, 팀원 공유용 요약이 있습니다.
 >
 > ⚠️ [LIMITATIONS.md](LIMITATIONS.md)도 함께 읽어 주세요. 파일럿의 연결 판정·코딩은 LLM(Claude) 단일 코더 값이고,
-> 네이버 API 수집은 아직 실제 키로 실행해 보지 않았습니다.
+> AI 크롤러를 막은 주요 일간지·통신사(한국일보·연합뉴스·매일경제 등) 기사는 사람이 본문을 넣어야 분석에 들어갑니다.
 
 ---
 
@@ -29,7 +29,7 @@
 방향   = 논문을 먼저 정하고 → 그 논문을 보도한 기사를 찾아 내려간다
 ```
 
-`config/bundles.yaml` 에 노션 사례 정리의 6개 묶음이 미리 들어 있습니다.
+`config/bundles.yaml` 에 15개 묶음이 들어 있습니다(노션 사례 6개 + 네이버 API `discover`·웹 검색으로 찾은 9개).
 
 | bundle_id | 논문 | 비고 |
 |---|---|---|
@@ -39,9 +39,18 @@
 | B04_semaglutide_NAION | Hathaway 2024, *JAMA Ophthalmol* | 단일기관 조건이 사라지는지 |
 | B05_semaglutide_suicidality | Wang 2024, *Nature Medicine* | 위험 '축소' 방향 |
 | B06_finasteride_depression | Brezis 2025, *J Clin Psychiatry* | '유발?' vs '인과관계 회의적', 출처 표기 오류 |
+| B07_APAP_autism_Lancet2026 | D'Antonio 2026, *Lancet Obstet Gynaecol Womens Health* | 메타분석·무관, 로이터→연합 받아쓰기 |
+| B08_ADHD_med_CVD | Zhang 2023, *JAMA Psychiatry* | '장기 복용' 조건, "일으킨다" 단정 |
+| B09_GLP1_GI_events | Sodhi 2023, *JAMA* | 상대위험 9배만 전달, 대상(비당뇨) 바뀜 |
+| B10_gabapentin_dementia | Eghrari 2025, *Reg Anesth Pain Med* | 제목-본문 불일치(관찰연구 한계 서술) |
+| B11_APAP_elderly_side_effects | Kaur 2024, *Arthritis Care Res* | 국내 보도 1건 |
+| B12_hormonal_contraceptive_breast_cancer | Fitzpatrick 2023, *PLOS Med* | '약간 증가' 효과 크기 생략 |
+| B13_semaglutide_lifespan_mice | Feng 2026, *Nature* (생쥐) | 동물→사람 일반화("9년 더 산다고?") |
+| B14_oral_steroid_CRSwNP | Moon 2026, *JAMA Otolaryngol* (세브란스) | 보도자료형 — 조건은 제목에 유지 |
+| B15_PPI_migraine | Slavin 2024, *Neurol Clin Pract* | 횡단면 연구 → "이 약 때문에 두통" |
 
 사례 2(타이레놀)는 논문이 2편이라 '묶음당 논문 1편' 원칙에 따라 B02/B03으로 나눴습니다.
-나머지 14~19개 묶음은 `medclaim discover`로 후보를 찾아 추가합니다.
+20~25개까지 남은 묶음은 `medclaim discover`로 후보를 찾아 추가합니다.
 
 ## 2. 파이프라인 (★ = 사람이 검증·입력하는 단계)
 
